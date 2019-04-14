@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import Paper from "@material-ui/core/Paper";
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
 import {
@@ -15,15 +15,27 @@ import fire from '../../config/Fire';
 
 const theme = createMuiTheme({ palette: { type: "light", primary: blue } });
 
-class Calendar extends React.PureComponent {
+class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            userId: fire.auth().currentUser.uid,
             data: appointments,
             currentDate: new Date(), // set to today's date by default
             message: '',
         };
-        this.commitChanges = this.commitChanges.bind(this);
+    }
+
+    componentDidMount = () => {
+        let self = this
+        let database = fire.database().ref();
+        let userId = this.state.userId
+        database.on("value", function(snapshot) {
+            let scheduleArr = snapshot.val()[userId].schedule
+            self.setState({
+                data: scheduleArr,
+            })
+        })
     }
 
     updateCalenderDB = (e) => {
@@ -46,7 +58,7 @@ class Calendar extends React.PureComponent {
     }
 
     // base code from the documemtation: https://devexpress.github.io/devextreme-reactive/react/scheduler/docs/guides/editing/
-    commitChanges({ added, changed, deleted }) {
+    commitChanges = ({ added, changed, deleted }) => {
         let { data } = this.state;
         let username = fire.auth().currentUser.uid
         let scheduleObj = this.state.data;
