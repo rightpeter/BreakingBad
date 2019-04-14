@@ -65,7 +65,8 @@ class UserConfig extends Component {
         })
     }
 
-    handleRemove = (idx) => {
+    handleRemove = (e, idx) => {
+        e.preventDefault();
         this.state.websites.splice(idx, 1)
         this.setState({
             websites: this.state.websites,
@@ -96,7 +97,7 @@ class UserConfig extends Component {
                                     return (
                                         <div key={idx}>
                                             <input style={{ marginRight: '.5em', width: "90%", display: "inline" }} className="form-control" onChange={(e) => this.handleWebsiteChange(e, idx)} value={url} />
-                                            <button className="btn btn-danger" onClick={() => this.handleRemove(idx)}>X</button>
+                                            <button className="btn btn-danger" onClick={(e) => this.handleRemove(e, idx)}>X</button>
                                         </div>
                                     )
                                 })
