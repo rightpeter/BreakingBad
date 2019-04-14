@@ -6,7 +6,6 @@ import './styles.css';
 class UserConfig extends Component {
     constructor(props) {
         super(props);
-        this.applyConfig = this.applyConfig.bind(this);
         this.reset = this.reset.bind(this);
         this.state = {
             websites: [],
@@ -17,23 +16,10 @@ class UserConfig extends Component {
         };
     }
 
-    applyConfig(e) {
-        console.log(this.state.first_timeout, this.state.sec_timeout)
-        e.preventDefault();
-        const userRef = fire.database().ref('testdata');
-        const settings = {
-            //websites: this.state.websites,
-            //entertainments: this.state.entertainments,
-            first_timeout: parseInt(this.state.first_timeout),
-            sec_timeout: parseInt(this.state.sec_timeout),
-        }
-        userRef.push(settings)
-    }
-
     addConfigToDB = (e) => {
         e.preventDefault();
         let username = fire.auth().currentUser.uid
-        const ref = fire.database().ref(username)
+        const ref = fire.database().ref(username).child("config")
         const webObj = {
             websites: this.state.websites,
             first_timeout: parseInt(this.state.first_timeout),

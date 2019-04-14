@@ -1,3 +1,4 @@
 /breaking_bad/web_app/node_modules
 /breaking_bad/web_app/package-lock.json
 /breaking_bad/.env
+/breaking_bad/web_app/.eslintrc
