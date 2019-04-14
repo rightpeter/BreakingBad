@@ -4,6 +4,7 @@ import './App.css';
 import Login from './components/Login';
 import Home from './Home';
 import UserConfig from './components/UserConfig'
+import Calendar from './components/Calendar'
 import { BrowserRouter, Route } from "react-router-dom";
 class App extends Component {
 
@@ -19,6 +20,7 @@ class App extends Component {
       <BrowserRouter>
         <div>
           <Route path='/' component={Home} />
+          <Route path='/calendar' component={Calendar} />
           <Route path='/config' component={UserConfig} />
           <Route path='/login' component={Login} />
         </div>
