@@ -16,9 +16,10 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <BrowserRouter>
-        <div>
+        <div style={{background:'floralwhite'}}>
           <Route path='/' component={Home} />
           <Route path='/calendar' component={Calendar} />
           <Route path='/config' component={UserConfig} />
