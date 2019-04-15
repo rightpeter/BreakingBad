@@ -38,25 +38,6 @@ class Calendar extends React.Component {
         })
     }
 
-    updateCalenderDB = (e) => {
-        e.preventDefault();
-        let username = fire.auth().currentUser.uid
-        const ref = fire.database().ref(username)
-        const scheduleObj = {
-            message: 'test'
-
-        }
-        ref.set(scheduleObj).then((u) => {
-            this.setState({
-                message: 'Setting has been updated successfully!'
-            })
-        }).catch((error) => {
-            this.setState({
-                message: error
-            })
-        });
-    }
-
     // base code from the documemtation: https://devexpress.github.io/devextreme-reactive/react/scheduler/docs/guides/editing/
     commitChanges = ({ added, changed, deleted }) => {
         let { data } = this.state;
@@ -78,15 +59,6 @@ class Calendar extends React.Component {
                     ...added,
                 },
             ];
-            scheduleRef.set(data).then((u) => {
-                this.setState({
-                    message: 'Schedule has been updated successfully!'
-                })
-            }).catch((error) => {
-                this.setState({
-                    message: error
-                })
-            });
         }
         if (changed) {
             data = data.map(appointment => (
@@ -95,6 +67,15 @@ class Calendar extends React.Component {
         if (deleted) {
             data = data.filter(appointment => appointment.id !== deleted);
         }
+        scheduleRef.set(data).then((u) => {
+            this.setState({
+                message: 'Schedule has been updated successfully!'
+            })
+        }).catch((error) => {
+            this.setState({
+                message: error
+            })
+        });
         this.setState({ data });
         
 
