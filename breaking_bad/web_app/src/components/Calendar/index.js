@@ -77,29 +77,84 @@ class Calendar extends React.Component {
             })
         });
         this.setState({ data });
-        
+        console.log(data)
 
+    }
+
+    addMinutes = (date, minutes) => {
+        return new Date(date.getTime() + minutes * 60000);
+    }
+    
+    addProcrastination = (e, appoinments,startTime, duration, title) => {
+
+        let { data } = this.state;
+        e.preventDefault()
+        console.log(appoinments)
+        console.log('start', startTime, 'duration', duration)
+        // detect overlapping time
+        for (let idx in appoinments) {
+            console.log('app', appoinments[idx])
+            if (new Date(appoinments[idx].startDate) <= startTime && startTime <= new Date(appoinments[idx].endDate)) {
+                console.log('overlapping', idx)
+                let newStartDate = this.addMinutes(startTime, duration)
+                let diff = new Date(appoinments[idx].endDate) - new Date(appoinments[idx].startDate)
+                let newEndDate = this.addMinutes(newStartDate, Math.floor((diff/1000)/60))
+                // edit app
+                appoinments[idx] = {
+                    ...appoinments[idx],
+                    startDate: newStartDate.toString(),
+                    endDate: newEndDate.toString(),
+                }
+                console.log('new app', appoinments)
+                break
+            }
+        }
+        const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
+        let procrastination = {
+            allDay: false,
+            endDate: this.addMinutes(startTime, duration),
+            id: startingAddedId,
+            startDate: startTime.toString(),
+            title: title,
+        }
+        data = [
+            ...data,
+            {
+                id: startingAddedId,
+                ...procrastination,
+            },
+        ];
+        this.setState({ data });
+        console.log('fin data', data)
     }
 
     render() {
         const { data, currentDate } = this.state;
-
+        const startTime = new Date("Mon Apr 15 2019 11:20:00")
+        const duration = 20
+        console.log('data', data)
         return (
-            <MuiThemeProvider theme={theme}>
-                <Paper>
-                    <Scheduler data={data}>
-                        <ViewState currentDate={currentDate} />
-                        <EditingState onCommitChanges={this.commitChanges} />
-                        <WeekView startDayHour={9} endDayHour={19} />
-                        <Appointments />
-                        <AppointmentTooltip
-                            showOpenButton
-                            showDeleteButton
-                        />
-                        <AppointmentForm />
-                    </Scheduler>
-                </Paper>
-            </MuiThemeProvider>
+            <div>
+                <h2 style={{marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center'}}>Your Schedule</h2>
+                <center>
+                    <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination</button>
+                </center>
+                <MuiThemeProvider theme={theme}>
+                    <Paper>
+                        <Scheduler data={data}>
+                            <ViewState currentDate={currentDate} />
+                            <EditingState onCommitChanges={this.commitChanges} />
+                            <WeekView startDayHour={9} endDayHour={19} />
+                            <Appointments />
+                            <AppointmentTooltip
+                                showOpenButton
+                                showDeleteButton
+                            />
+                            <AppointmentForm />
+                        </Scheduler>
+                    </Paper>
+                </MuiThemeProvider>
+            </div>
         );
     }
 }

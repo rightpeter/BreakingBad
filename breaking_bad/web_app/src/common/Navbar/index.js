@@ -21,7 +21,6 @@ class Navbar extends React.Component {
   }
 
   render() {
-
       return(
         <div className="navbar">
           <div className="logo-container">
