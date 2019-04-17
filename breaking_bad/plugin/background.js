@@ -4,38 +4,140 @@
 
 'use strict';
 
+var userId = '3UvP6GeJo4b9y51jKZ1NZQUr2qb2';
+var notifIdCounter = 0;
+
+const config = {
+    apiKey: "AIzaSyCSoc86zMDGJjRwTzjTnU2UFKc96VQlVAo",
+    authDomain: "breaking-bad-b34cc.firebaseapp.com",
+    databaseURL: "https://breaking-bad-b34cc.firebaseio.com",
+    projectId: "breaking-bad-b34cc",
+    storageBucket: "breaking-bad-b34cc.appspot.com",
+    messagingSenderId: "614753134089"
+};
+
+var fireProj = firebase.initializeApp(config);
+
+var db = fireProj.database().ref();
+
+function startPolling() {
+  function fetchConfig() {
+    db.on("value", (snapshot) => {
+      var dbConfig = snapshot.val()[userId].config
+      console.log(dbConfig)
+      chrome.storage.sync.set({config: dbConfig}, () => {});
+    })
+  }
+
+  function poll() {
+    setTimeout(fetchConfig, 5000);
+  };
+
+  fetchConfig();
+  poll();
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function creationCallback() {
-  console.log('popNotification!');
+function creationCallback(notifId, website) {
+  var save = {};
+  save[notifId] = website;
+  chrome.storage.sync.set(save, () => {
+    console.log('popNotification! notifId: ' + notifId + ' website: ' + website);
+  })
 }
 
-async function createNotification(sleepTime) {
-  await sleep(sleepTime);
-  chrome.notifications.create(opt, creationCallback);
+async function createNotification(sleepTime, website) {
+  // await sleep(sleepTime * 60 * 1000);
+  console.log("sleepTime: " + sleepTime);
+  await sleep(sleepTime * 1000);
+
+  var opt = {
+    type: 'basic',
+    title: 'Are you procrastinating again?',
+    message: 'You\'ve watched ' + website + ' for ' + sleepTime + ' min\nIs everything OK?',
+    iconUrl: 'images/tired_face.jpg',
+    buttons: [{
+      title: 'Oh, I will stop right now!',
+    }, {
+      title: 'I have to do this, let\'s reschecdule!',
+    }],
+  };
+
+  chrome.notifications.create(opt, (notifId) => {
+    creationCallback(notifId, website);
+  });
 }
 
-const opt = {
-  type: 'basic',
-  title: 'Are you procrastinating again?',
-  message: 'You\'ve watched Youtube for 20 min\nIs everything OK?',
-  iconUrl: 'images/tired_face.jpg',
-  buttons: [{
-    title: 'Oh, I will stop right now!',
-  }, {
-    title: 'I have to do this, let\'s reschecdule!',
-  }],
-};
+async function ignoreNotification(sleepTime, website) {
+  //await sleep(sleepTime * 60 * 1000);
+  await sleep(sleepTime * 1000);
+  console.log("IgnoreNotification!");
+
+  chrome.storage.sync.get(website, (items) => {
+    if (Object.keys(items).length !== 0) {
+      chrome.storage.sync.remove(website, () => {
+        console.log('Update firebase');
+      });
+    }
+  })
+}
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  // alert('tabId: ' + tabId );
-  // alert('url: ' + changeInfo.url);
-  // alert('title: ' + changeInfo.title);
-  // alert('tab: ' + tab);
+  chrome.storage.sync.get('config', (data) => {
+    var dbConfig = data.config
 
-  if (typeof changeInfo.url !== 'undefined' && changeInfo.url.includes('youtube.com')) {
-    createNotification(5000);
-  }
+    if (typeof changeInfo.url !== 'undefined') {
+      dbConfig.websites.forEach((website) => {
+        if (changeInfo.url.includes(website)) {
+          console.log("includes: " + website);
+          chrome.storage.sync.get(website, (items) => {
+            console.log(items.length);
+            if (Object.keys(items).length === 0) {
+              var save = {};
+              save[website] = true;
+              chrome.storage.sync.set(save, () => {
+                //createNotification(dbConfig.first_timeout, website);
+                //createNotification(dbConfig.sec_timeout, website);
+                //ignoreNotification(dbConfig.sec_timeout + 1, website);
+                createNotification(1, website);
+                createNotification(20, website);
+                ignoreNotification(21, website);
+              })
+            }
+          })
+        }
+      })
+    }
+  });
+});
+
+function buttonClickCallback(notifId, btnId) {
+  //console.log('button notifId: ' + notifId);
+  chrome.storage.sync.get(notifId, (data) => {
+    console.log(data);
+    var website = data[notifId];
+    console.log('website: ' + website);
+
+    chrome.storage.sync.remove(website, () => {
+      console.log("notifId: " + notifId);
+      console.log("btnId: " + btnId);
+      if (btnId === 0) {
+        console.log("redirect google");
+        chrome.tabs.create({ url: "https://www.google.com" });
+      } else if (btnId === 1){
+        console.log("redirect google");
+        chrome.tabs.create({ url: "https://www.google.com" });
+      }
+    });
+  })
+}
+
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.clear();
+
+  startPolling();
+  chrome.notifications.onButtonClicked.addListener(buttonClickCallback)
 });
