@@ -130,7 +130,23 @@ class Calendar extends React.Component {
                 
             }
         }
-
+        // delay schedule
+        console.log('before', data)
+        for (let idx in appoinments) {
+            // if schedule is today and it was ORIGINALLY supposed to happend AFTER procrastination  
+            if ((new Date(appoinments[idx].startDate).getDate() === startTime.getDate()) && (new Date(appoinments[idx].startDate) >= startTime)) {
+                if (isSliced) {
+                    console.log('to be fixed', appoinments[idx].title)
+                    appoinments[idx] = {
+                        ...appoinments[idx],
+                        startDate: this.addMinutes(new Date(appoinments[idx].startDate), duration).toString(),
+                        endDate: this.addMinutes(new Date(appoinments[idx].endDate), duration).toString()
+                    }
+                    console.log('new', appoinments[idx])
+                }
+            }
+        }
+        console.log('delayed', data)
         let prosEnd = this.addMinutes(startTime, duration)
         const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
         let procrastination = {
@@ -144,7 +160,7 @@ class Calendar extends React.Component {
         data = [
             ...data,
             {
-                // id: startingAddedId,
+                id: startingAddedId,
                 ...procrastination,
             },
         ];
@@ -153,7 +169,7 @@ class Calendar extends React.Component {
     
             let slice = {
                 allDay: false,
-                endDate: this.addMinutes(prosEnd, sliceDiff),
+                endDate: this.addMinutes(prosEnd, sliceDiff).toString(),
                 id: startingAddedId,
                 startDate: this.addMinutes(startTime, duration).toString(),
                 title: appoinments[slicedIdx].title + ' (Delayed)',
@@ -166,22 +182,7 @@ class Calendar extends React.Component {
                 },
             ];
         }
-        // delay schedule
-        for (let idx in appoinments) {
-            // if schedule is today and it was ORIGINALLY supposed to happend AFTER procrastination  
-            if ((new Date(appoinments[idx].startDate).getDate() === startTime.getDate()) && (new Date(appoinments[idx].startDate) >= startTime)) {
-                if (isSliced) {
-                    console.log(appoinments[idx].title)
-                    appoinments[idx] = {
-                        ...appoinments[idx],
-                        startDate: this.addMinutes(new Date(appoinments[idx].startDate), duration).toString(),
-                        endDate: this.addMinutes(new Date(appoinments[idx].endDate), duration).toString()
-                    }
-                    console.log('new', appoinments[idx])
-                }
-            }
-        }
-        console.log('delayed', this.state.data)
+
 
 
         this.setState({ data });
@@ -193,6 +194,7 @@ class Calendar extends React.Component {
         const duration = 30
         const startTime2 = new Date("Mon Apr 17 2019 11:30:00")
         const duration2 = 40
+        console.log('rendered', data)
         return (
             <div>
                 <h2 style={{marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center'}}>Your Schedule</h2>
