@@ -2,3 +2,5 @@
 /breaking_bad/web_app/package-lock.json
 /breaking_bad/.env
 /breaking_bad/web_app/.eslintrc
+
+.DS_Store

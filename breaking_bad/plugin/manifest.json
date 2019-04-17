@@ -4,12 +4,11 @@
   "description": "Plugin for Breaking Bad",
   "permissions": [
     "notifications",
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "page": "background.html"
   },
   "browser_action": {
     "default_popup": "popup.html"
@@ -20,5 +19,6 @@
     "48": "images/get_started48.png",
     "128": "images/get_started128.png"
   },
-  "manifest_version": 2
+  "manifest_version": 2,
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'"
 }
