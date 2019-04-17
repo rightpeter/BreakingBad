@@ -16,6 +16,23 @@ class UserConfig extends Component {
         };
     }
 
+    // Load config info from DB
+    componentDidMount = () => {
+        let self = this
+        let database = fire.database().ref();
+        let uid = fire.auth().currentUser.uid
+        database.on("value", function (snapshot) {
+            let websitesDB = snapshot.val()[uid].config.websites
+            let first_timeoutDB = snapshot.val()[uid].config.first_timeout
+            let sec_timeoutDB = snapshot.val()[uid].config.sec_timeout
+            self.setState({
+                websites: websitesDB,
+                first_timeout: first_timeoutDB,
+                sec_timeout: sec_timeoutDB,
+            })
+        })
+    }
+
     addConfigToDB = (e) => {
         e.preventDefault();
         let username = fire.auth().currentUser.uid
