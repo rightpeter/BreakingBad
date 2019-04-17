@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Home from './Home';
 import UserConfig from './components/UserConfig'
 import Calendar from './components/Calendar'
+import CollapseTest from './components/CollapseTest'
 import { BrowserRouter, Route } from "react-router-dom";
 class App extends Component {
 
@@ -24,6 +25,7 @@ class App extends Component {
           <Route path='/calendar' component={Calendar} />
           <Route path='/config' component={UserConfig} />
           <Route path='/login' component={Login} />
+          <Route path='/test' component={CollapseTest} />
         </div>
       </BrowserRouter>
 

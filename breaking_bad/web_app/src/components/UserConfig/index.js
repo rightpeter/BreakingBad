@@ -58,7 +58,7 @@ class UserConfig extends Component {
         this.setState({
             websites: [...this.state.websites, ""]
         })
-    }
+    }   
 
     handleWebsiteChange = (e, idx) => {
         e.preventDefault();
