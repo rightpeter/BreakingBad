@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Paper from "@material-ui/core/Paper";
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
 import {
@@ -30,7 +30,7 @@ class Calendar extends React.Component {
         let self = this
         let database = fire.database().ref();
         let userId = this.state.userId
-        database.on("value", function(snapshot) {
+        database.on("value", function (snapshot) {
             let scheduleArr = snapshot.val()[userId].schedule
             self.setState({
                 data: scheduleArr,
@@ -42,7 +42,6 @@ class Calendar extends React.Component {
     commitChanges = ({ added, changed, deleted }) => {
         let { data } = this.state;
         let username = fire.auth().currentUser.uid
-        let scheduleObj = this.state.data;
         const ref = fire.database().ref(username)
         const scheduleRef = ref.child("schedule")
         if (added) {
@@ -77,8 +76,6 @@ class Calendar extends React.Component {
             })
         });
         this.setState({ data });
-        console.log(data)
-
     }
 
     addMinutes = (date, minutes) => {
@@ -86,7 +83,6 @@ class Calendar extends React.Component {
     }
 
     addProcrastination = (e, appoinments, startTime, duration, title) => {
-
         let isSliced = false
         let origAppEndTime = null
         let slicedIdx = null
@@ -94,7 +90,7 @@ class Calendar extends React.Component {
         e.preventDefault()
 
         // sort by start date
-        appoinments.sort(function(a,b) {
+        appoinments.sort(function (a, b) {
             return new Date(a.startDate) - new Date(b.startDate);
         });
 
@@ -115,38 +111,32 @@ class Calendar extends React.Component {
                 break
             } else if (((new Date(appoinments[idx].startDate) >= startTime) && (endTime >= new Date(appoinments[idx].startDate)))) {
                 let diff = Math.floor(((endTime - new Date(appoinments[idx].startDate)) / 1000) / 60)
-                console.log(diff)
                 for (let idx in appoinments) {
                     // if schedule is today and it was ORIGINALLY supposed to happend AFTER procrastination  
                     if ((new Date(appoinments[idx].startDate).getDate() === startTime.getDate()) && (new Date(appoinments[idx].startDate) >= startTime)) {
-                        console.log('here', appoinments[idx])
                         appoinments[idx] = {
                             ...appoinments[idx],
                             startDate: this.addMinutes(new Date(appoinments[idx].startDate), diff).toString(),
                             endDate: this.addMinutes(new Date(appoinments[idx].endDate), diff).toString()
+                        }
                     }
                 }
-                }
-                
             }
         }
         // delay schedule
-        console.log('before', data)
         for (let idx in appoinments) {
             // if schedule is today and it was ORIGINALLY supposed to happend AFTER procrastination  
             if ((new Date(appoinments[idx].startDate).getDate() === startTime.getDate()) && (new Date(appoinments[idx].startDate) >= startTime)) {
                 if (isSliced) {
-                    console.log('to be fixed', appoinments[idx].title)
                     appoinments[idx] = {
                         ...appoinments[idx],
                         startDate: this.addMinutes(new Date(appoinments[idx].startDate), duration).toString(),
                         endDate: this.addMinutes(new Date(appoinments[idx].endDate), duration).toString()
                     }
-                    console.log('new', appoinments[idx])
                 }
             }
         }
-        console.log('delayed', data)
+
         let prosEnd = this.addMinutes(startTime, duration)
         const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
         let procrastination = {
@@ -164,9 +154,10 @@ class Calendar extends React.Component {
                 ...procrastination,
             },
         ];
+
         if (isSliced) {
             let sliceDiff = Math.floor(((new Date(origAppEndTime) - startTime) / 1000) / 60)
-    
+
             let slice = {
                 allDay: false,
                 endDate: this.addMinutes(prosEnd, sliceDiff).toString(),
@@ -183,21 +174,24 @@ class Calendar extends React.Component {
             ];
         }
 
-
-
         this.setState({ data });
     }
 
     render() {
         const { data, currentDate } = this.state;
+
+        /* Below is test. Remove later. */
+
         const startTime = new Date("Mon Apr 15 2019 12:45:00")
         const duration = 30
         const startTime2 = new Date("Mon Apr 17 2019 11:30:00")
         const duration2 = 40
-        console.log('rendered', data)
+
+        /* Above is test */
+
         return (
             <div>
-                <h2 style={{marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center'}}>Your Schedule</h2>
+                <h2 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h2>
                 <center>
                     <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination (Procrastinate from 12:45 PM to 1:15 PM)</button>
                     <button onClick={(e) => this.addProcrastination(e, data, startTime2, duration2, 'Procrastination')}>Test Add Procrastination (Procrastinate from 11:30 AM to 12:10 PM)</button>
