@@ -1,16 +1,10 @@
-form {
-    background: #55acf3;
-    padding: 1.5em;
-    border-radius: 1em;
-}
-
-.form-style {
-    margin-top: 2em;
-}
-
 .error-message {
     margin-top: 1em;
     color: red;
+}
+
+.none-style {
+    background-color: white;
 }
 
 .center {
@@ -18,4 +12,9 @@ form {
     justify-content: center;
     align-items: center;
     height:100vh;  
+}
+
+.date-header {
+    margin: 1em;
+    font-weight: bold;
 }
