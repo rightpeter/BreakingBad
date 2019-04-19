@@ -34,7 +34,6 @@ class Navbar extends React.Component {
             <span style={{color:'white'}} onClick={this.handleLogout}>Sign Out</span>
             <Link style={{ textDecoration: 'none' }} to="/config"><span style={{color:'white', marginRight:'2em'}}>Configuration</span></Link>
             <Link style={{ textDecoration: 'none' }} to="/calendar"><span style={{color:'white', marginRight:'2em'}}>Calendar</span></Link>
-            <Link style={{ textDecoration: 'none' }} to="/test"><span style={{color:'white', marginRight:'2em'}}>Feedback</span></Link>
           </div>
         </div>
       );

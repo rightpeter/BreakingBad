@@ -16,13 +16,6 @@ import { Accordion, Card, Form } from 'react-bootstrap';
 
 const theme = createMuiTheme({ palette: { type: "light", primary: blue } });
 
-const DayScaleCell = props => (
-    <WeekView.DayScaleCell
-        {...props}
-        onClick={() => console.log(props.startDate)}
-    />
-);
-
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
@@ -47,6 +40,12 @@ class Calendar extends React.Component {
             self.setState({
                 data: scheduleArr,
             })
+        })
+    }
+
+    changeCurrDate = (date) => {
+        this.setState({
+            currentDate: date.getDate(),
         })
     }
 
@@ -217,7 +216,7 @@ class Calendar extends React.Component {
     }
 
     render() {
-        console.log('re-render')
+        console.log('re-render', this.state.data, this.state.currentDate)
         const { data, currentDate } = this.state;
 
         /* Below is test. Remove later. */
@@ -230,9 +229,9 @@ class Calendar extends React.Component {
         /* Above is test */
 
         return (
-            <div>
+            <div className="row" style={{padding: '0.5em'}}>
                 <div className="col-md-9">
-                    <h2 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h2>
+                    <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h3>
                     <center>
                         <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination (Procrastinate from 12:45 PM to 1:15 PM)</button>
                         <button onClick={(e) => this.addProcrastination(e, data, startTime2, duration2, 'Procrastination')}>Test Add Procrastination (Procrastinate from 11:30 AM to 12:10 PM)</button>
@@ -245,7 +244,7 @@ class Calendar extends React.Component {
                                 <WeekView
                                     startDayHour={9}
                                     endDayHour={19}
-                                    dayScaleCellComponent={DayScaleCell}
+                                    // dayScaleCellComponent={DayScaleCell}
                                 />
                                 <Appointments />
                                 <AppointmentTooltip
@@ -257,7 +256,9 @@ class Calendar extends React.Component {
                         </Paper>
                     </MuiThemeProvider>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3" style={{textAlign: 'center'}}>
+                
+                    <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Feedback</h3>
                     <span className="date-header">Date: {this.state.selectedDate.getDate()}</span>
                     <Accordion defaultActiveKey={0}>
                         {
