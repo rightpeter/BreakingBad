@@ -16,6 +16,10 @@ import { Accordion, Card, Form } from 'react-bootstrap';
 
 const theme = createMuiTheme({ palette: { type: "light", primary: blue } });
 
+const DayScaleCell = (props, func) => (
+    <WeekView.DayScaleCell {...props} onClick={() => func(props.startDate)} />
+  );
+
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
@@ -45,7 +49,7 @@ class Calendar extends React.Component {
 
     changeCurrDate = (date) => {
         this.setState({
-            currentDate: date.getDate(),
+            selectedDate: date,
         })
     }
 
@@ -54,12 +58,10 @@ class Calendar extends React.Component {
         let newState = Object.assign({}, this.state.data)
         newState[idx].feedback = e.target.value
         this.setState(newState)
-
     }
 
     saveFeedback = (e) => {
         e.preventDefault();
-
         let username = fire.auth().currentUser.uid
         const ref = fire.database().ref(username)
         const scheduleRef = ref.child("schedule")
@@ -72,7 +74,6 @@ class Calendar extends React.Component {
                 message: error
             })
         });
-
     }
 
 
@@ -216,7 +217,7 @@ class Calendar extends React.Component {
     }
 
     render() {
-        console.log('re-render', this.state.data, this.state.currentDate)
+        console.log('re-render', this.state.data, this.state.selectedDate)
         const { data, currentDate } = this.state;
 
         /* Below is test. Remove later. */
@@ -244,7 +245,7 @@ class Calendar extends React.Component {
                                 <WeekView
                                     startDayHour={9}
                                     endDayHour={19}
-                                    // dayScaleCellComponent={DayScaleCell}
+                                    dayScaleCellComponent={e => DayScaleCell(e, this.changeCurrDate)}
                                 />
                                 <Appointments />
                                 <AppointmentTooltip
@@ -264,7 +265,7 @@ class Calendar extends React.Component {
                         {
                             this.state.data.map((obj, idx) => {
                                 // filter out the current date schedule
-                                if (new Date(obj.startDate).getDate() === this.state.selectedDate.getDate()) {
+                                if (new Date(obj.startDate).getDate() === (this.state.selectedDate).getDate()) {
                                     return (
                                         <Card>
                                             <Accordion.Toggle as={Card.Header} eventKey={idx}>

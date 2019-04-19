@@ -16,7 +16,6 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <BrowserRouter>
         <div style={{background:'floralwhite'}}>
@@ -26,7 +25,6 @@ class App extends Component {
           <Route path='/login' component={Login} />
         </div>
       </BrowserRouter>
-
     );
   }
 }

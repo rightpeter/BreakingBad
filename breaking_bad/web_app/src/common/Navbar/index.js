@@ -25,20 +25,17 @@ class Navbar extends React.Component {
         <div className="navbar">
           <div className="logo-container">
             <img src={Logo}></img>
-          </div>
-          
+          </div> 
           <div className="left-link-container">
           </div>
-  
           <div className="right-link-container">
-            <span style={{color:'white'}} onClick={this.handleLogout}>Sign Out</span>
+            <span style={{ color:'white' }} onClick={this.handleLogout}>Sign Out</span>
             <Link style={{ textDecoration: 'none' }} to="/config"><span style={{color:'white', marginRight:'2em'}}>Configuration</span></Link>
             <Link style={{ textDecoration: 'none' }} to="/calendar"><span style={{color:'white', marginRight:'2em'}}>Calendar</span></Link>
           </div>
         </div>
       );
     } 
-  
 }
 
 export default Navbar;
