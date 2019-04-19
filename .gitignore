@@ -4,3 +4,5 @@
 /breaking_bad/web_app/.eslintrc
 
 .DS_Store
+
+config.json

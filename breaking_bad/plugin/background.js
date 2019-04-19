@@ -7,17 +7,20 @@
 var userId = '3UvP6GeJo4b9y51jKZ1NZQUr2qb2';
 var notifIdCounter = 0;
 
-const config = {
-    apiKey: "AIzaSyCSoc86zMDGJjRwTzjTnU2UFKc96VQlVAo",
-    authDomain: "breaking-bad-b34cc.firebaseapp.com",
-    databaseURL: "https://breaking-bad-b34cc.firebaseio.com",
-    projectId: "breaking-bad-b34cc",
-    storageBucket: "breaking-bad-b34cc.appspot.com",
-    messagingSenderId: "614753134089"
-};
+var fireProj;
 
-var fireProj = firebase.initializeApp(config);
+const configURL = chrome.runtime.getURL('config.json')
 
+fetch(configURL)
+  .then((response) => response.json())
+  .then((config) => initFirebase(config));
+
+
+function initFirebase(config) {
+  console.log("config:");
+  console.log(config);
+  fireProj = firebase.initializeApp(config);
+}
 
 function startPolling() {
   var db = fireProj.database().ref();
@@ -51,9 +54,9 @@ function creationCallback(notifId, website) {
 }
 
 async function createNotification(sleepTime, website) {
-  // await sleep(sleepTime * 60 * 1000);
-  console.log("sleepTime: " + sleepTime);
-  await sleep(sleepTime * 1000);
+  await sleep(sleepTime * 60 * 1000);
+  //console.log("sleepTime: " + sleepTime);
+  //await sleep(sleepTime * 1000);
 
   var opt = {
     type: 'basic',
@@ -73,9 +76,9 @@ async function createNotification(sleepTime, website) {
 }
 
 async function ignoreNotification(sleepTime, website) {
-  //await sleep(sleepTime * 60 * 1000);
-  await sleep(sleepTime * 1000);
-  console.log("IgnoreNotification!");
+  await sleep(sleepTime * 60 * 1000);
+  //await sleep(sleepTime * 1000);
+  //console.log("IgnoreNotification!");
 
   chrome.storage.sync.get(website, (items) => {
     if (Object.keys(items).length !== 0) {
@@ -110,12 +113,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
               var save = {};
               save[website] = true;
               chrome.storage.sync.set(save, () => {
-                //createNotification(dbConfig.first_timeout, website);
-                //createNotification(dbConfig.sec_timeout, website);
-                //ignoreNotification(dbConfig.sec_timeout + 1, website);
-                createNotification(1, website);
-                createNotification(10, website);
-                ignoreNotification(11, website);
+                createNotification(dbConfig.first_timeout, website);
+                createNotification(dbConfig.sec_timeout, website);
+                ignoreNotification(dbConfig.sec_timeout + 1, website);
+                //createNotification(1, website);
+                //createNotification(10, website);
+                //ignoreNotification(11, website);
               })
             }
           })
