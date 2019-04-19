@@ -12,8 +12,16 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { blue } from "@material-ui/core/colors";
 import { appointments } from "./data";
 import fire from '../../config/Fire';
+import { Accordion, Card, Form } from 'react-bootstrap';
 
 const theme = createMuiTheme({ palette: { type: "light", primary: blue } });
+
+const DayScaleCell = props => (
+    <WeekView.DayScaleCell
+        {...props}
+        onClick={() => console.log(props.startDate)}
+    />
+);
 
 class Calendar extends React.Component {
     constructor(props) {
@@ -23,10 +31,14 @@ class Calendar extends React.Component {
             data: appointments,
             currentDate: new Date(), // set to today's date by default
             message: '',
+            open: false,
+            selectedDate: new Date(),
         };
     }
 
+
     componentDidMount = () => {
+        // load data from DB
         let self = this
         let database = fire.database().ref();
         let userId = this.state.userId
@@ -37,6 +49,33 @@ class Calendar extends React.Component {
             })
         })
     }
+
+    handleFeedbackChange = (e, idx) => {
+        e.preventDefault();
+        let newState = Object.assign({}, this.state.data)
+        newState[idx].feedback = e.target.value
+        this.setState(newState)
+
+    }
+
+    saveFeedback = (e) => {
+        e.preventDefault();
+
+        let username = fire.auth().currentUser.uid
+        const ref = fire.database().ref(username)
+        const scheduleRef = ref.child("schedule")
+        scheduleRef.set(this.state.data).then((u) => {
+            this.setState({
+                message: 'Setting has been updated successfully!'
+            })
+        }).catch((error) => {
+            this.setState({
+                message: error
+            })
+        });
+
+    }
+
 
     // base code from the documemtation: https://devexpress.github.io/devextreme-reactive/react/scheduler/docs/guides/editing/
     commitChanges = ({ added, changed, deleted }) => {
@@ -178,6 +217,7 @@ class Calendar extends React.Component {
     }
 
     render() {
+        console.log('re-render')
         const { data, currentDate } = this.state;
 
         /* Below is test. Remove later. */
@@ -191,26 +231,73 @@ class Calendar extends React.Component {
 
         return (
             <div>
-                <h2 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h2>
-                <center>
-                    <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination (Procrastinate from 12:45 PM to 1:15 PM)</button>
-                    <button onClick={(e) => this.addProcrastination(e, data, startTime2, duration2, 'Procrastination')}>Test Add Procrastination (Procrastinate from 11:30 AM to 12:10 PM)</button>
-                </center>
-                <MuiThemeProvider theme={theme}>
-                    <Paper>
-                        <Scheduler data={data}>
-                            <ViewState currentDate={currentDate} />
-                            <EditingState onCommitChanges={this.commitChanges} />
-                            <WeekView startDayHour={9} endDayHour={19} />
-                            <Appointments />
-                            <AppointmentTooltip
-                                showOpenButton
-                                showDeleteButton
-                            />
-                            <AppointmentForm />
-                        </Scheduler>
-                    </Paper>
-                </MuiThemeProvider>
+                <div className="col-md-9">
+                    <h2 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h2>
+                    <center>
+                        <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination (Procrastinate from 12:45 PM to 1:15 PM)</button>
+                        <button onClick={(e) => this.addProcrastination(e, data, startTime2, duration2, 'Procrastination')}>Test Add Procrastination (Procrastinate from 11:30 AM to 12:10 PM)</button>
+                    </center>
+                    <MuiThemeProvider theme={theme}>
+                        <Paper>
+                            <Scheduler data={data}>
+                                <ViewState currentDate={currentDate} />
+                                <EditingState onCommitChanges={this.commitChanges} />
+                                <WeekView
+                                    startDayHour={9}
+                                    endDayHour={19}
+                                    dayScaleCellComponent={DayScaleCell}
+                                />
+                                <Appointments />
+                                <AppointmentTooltip
+                                    showOpenButton
+                                    showDeleteButton
+                                />
+                                <AppointmentForm />
+                            </Scheduler>
+                        </Paper>
+                    </MuiThemeProvider>
+                </div>
+                <div className="col-md-3">
+                    <span className="date-header">Date: {this.state.selectedDate.getDate()}</span>
+                    <Accordion defaultActiveKey={0}>
+                        {
+                            this.state.data.map((obj, idx) => {
+                                // filter out the current date schedule
+                                if (new Date(obj.startDate).getDate() === this.state.selectedDate.getDate()) {
+                                    return (
+                                        <Card>
+                                            <Accordion.Toggle as={Card.Header} eventKey={idx}>
+                                                <span class="glyphicon glyphicon-chevron-down"></span>{obj.title}
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey={idx}>
+                                                <Card.Body>
+                                                    <div>
+                                                        <p>Start Time: {obj.startDate}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p>End Time: {obj.endDate}</p>
+                                                    </div>
+                                                    <div>
+                                                        <Form className="none-style">
+                                                            <Form.Group controlId="exampleForm.ControlTextarea1">
+                                                                <Form.Label>Personal Feedback</Form.Label>
+                                                                <Form.Control onChange={(e) => this.handleFeedbackChange(e, idx)} value={obj.feedback} as="textarea" rows="3" />
+                                                            </Form.Group>
+                                                            <button type="submit" onClick={this.saveFeedback} className="btn btn-primary">Save Feedback</button>
+                                                        </Form>
+                                                    </div>
+                                                </Card.Body>
+                                            </Accordion.Collapse>
+                                        </Card>
+
+                                    )
+                                } else {
+                                    return <div />
+                                }
+                            })
+                        }
+                    </Accordion>
+                </div>
             </div>
         );
     }

@@ -2,7 +2,8 @@
 /breaking_bad/web_app/package-lock.json
 /breaking_bad/.env
 /breaking_bad/web_app/.eslintrc
+/breaking_bad/web_app/src/config.js
 
 .DS_Store
 
-config.json
+config.js

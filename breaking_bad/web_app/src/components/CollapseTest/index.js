@@ -16,7 +16,7 @@ class CollpaseTest extends Component {
             selectedDate: new Date(),
         };
     }
-
+    
     componentDidMount = () => {
         // load data from DB
         let self = this
