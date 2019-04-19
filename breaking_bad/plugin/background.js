@@ -18,9 +18,10 @@ const config = {
 
 var fireProj = firebase.initializeApp(config);
 
-var db = fireProj.database().ref();
 
 function startPolling() {
+  var db = fireProj.database().ref();
+
   function fetchConfig() {
     db.on("value", (snapshot) => {
       var dbConfig = snapshot.val()[userId].config
@@ -79,6 +80,16 @@ async function ignoreNotification(sleepTime, website) {
   chrome.storage.sync.get(website, (items) => {
     if (Object.keys(items).length !== 0) {
       chrome.storage.sync.remove(website, () => {
+        const ignoreMessage = {
+            websites: website,
+            endTime: Date.now(),
+        }
+
+        fireProj.database().ref(userId).child("ignore").set(ignoreMessage, () => {
+          console.log("ignoreMessage: ");
+          console.log(ignoreMessage);
+        });
+
         console.log('Update firebase');
       });
     }
@@ -103,8 +114,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                 //createNotification(dbConfig.sec_timeout, website);
                 //ignoreNotification(dbConfig.sec_timeout + 1, website);
                 createNotification(1, website);
-                createNotification(20, website);
-                ignoreNotification(21, website);
+                createNotification(10, website);
+                ignoreNotification(11, website);
               })
             }
           })
