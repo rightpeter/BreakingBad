@@ -216,6 +216,13 @@ class Calendar extends React.Component {
         this.setState({ data });
     }
 
+    formatDate = (date) => {
+        let dateStr = date.toDateString()
+        let timeStr = date.toTimeString().split(' ')[0]
+
+        return dateStr + ' ' + timeStr
+    }
+
     render() {
         console.log('re-render', this.state.data, this.state.selectedDate)
         const { data, currentDate } = this.state;
@@ -233,10 +240,10 @@ class Calendar extends React.Component {
             <div className="row" style={{padding: '0.5em'}}>
                 <div className="col-md-9">
                     <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h3>
-                    <center>
+                    {/*<center>
                         <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination (Procrastinate from 12:45 PM to 1:15 PM)</button>
                         <button onClick={(e) => this.addProcrastination(e, data, startTime2, duration2, 'Procrastination')}>Test Add Procrastination (Procrastinate from 11:30 AM to 12:10 PM)</button>
-                    </center>
+                    </center>*/}
                     <MuiThemeProvider theme={theme}>
                         <Paper>
                             <Scheduler data={data}>
@@ -260,7 +267,7 @@ class Calendar extends React.Component {
                 <div className="col-md-3" style={{textAlign: 'center'}}>
                 
                     <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Feedback</h3>
-                    <span className="date-header">Date: {this.state.selectedDate.getDate()}</span>
+                    <p className="date-header">Date: {this.state.selectedDate.toLocaleDateString()}</p>
                     <Accordion defaultActiveKey={0}>
                         {
                             this.state.data.map((obj, idx) => {
@@ -274,13 +281,13 @@ class Calendar extends React.Component {
                                             <Accordion.Collapse eventKey={idx}>
                                                 <Card.Body>
                                                     <div>
-                                                        <p>Start Time: {obj.startDate}</p>
+                                                        <p>Start Time: {this.formatDate(new Date(obj.startDate))}</p>
                                                     </div>
                                                     <div>
-                                                        <p>End Time: {obj.endDate}</p>
+                                                        <p>End Time: {this.formatDate(new Date(obj.endDate))}</p>
                                                     </div>
                                                     <div>
-                                                        <Form className="none-style">
+                                                        <Form style={{backgroundColor: 'white'}}>
                                                             <Form.Group controlId="exampleForm.ControlTextarea1">
                                                                 <Form.Label>Personal Feedback</Form.Label>
                                                                 <Form.Control onChange={(e) => this.handleFeedbackChange(e, idx)} value={obj.feedback} as="textarea" rows="3" />
