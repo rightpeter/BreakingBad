@@ -87,8 +87,8 @@ class Calendar extends React.Component {
             const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
             added = {
                 ...added,
-                startDate: added.startDate.toString(),
-                endDate: added.endDate.toString(),
+                startDate: added.startDate.toLocaleString('en'),
+                endDate: added.endDate.toLocaleString('en'),
             }
             data = [
                 ...data,

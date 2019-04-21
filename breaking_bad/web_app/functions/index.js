@@ -63,6 +63,11 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                     for (let idx in appoinments) {
                         // When the procrastination causes slice in the schedule
                         let endTime = addMinutes(startTime, duration)
+                        console.log('TITLE :', (appoinments[idx].title))
+                        console.log('(new Date(appoinments[idx].startDate)', (new Date(appoinments[idx].startDate)))
+                        console.log('startTime', startTime)
+                        console.log('new Date(appoinments[idx].endDate)', new Date(appoinments[idx].endDate))
+                        console.log('endTime', endTime)
                         if (((new Date(appoinments[idx].startDate) <= startTime) && (startTime <= new Date(appoinments[idx].endDate))) ||
                             ((new Date(appoinments[idx].startDate) <= startTime) && (endTime <= new Date(appoinments[idx].endDate)))) {
                             origAppEndTime = new Date(appoinments[idx].endDate)
@@ -117,10 +122,11 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
 
                     let prosEnd = endTime //addMinutes(startTime, duration)
                     const startingAddedId = appoinments.length > 0 ? appoinments[appoinments.length - 1].id + 1 : 0;
+                    let prosID = startingAddedId + 1
                     let procrastination = {
                         allDay: false,
                         endDate: prosEnd.toLocaleString('en'),
-                        id: startingAddedId,
+                        id: prosID,
                         startDate: startTime.toLocaleString('en'),
                         title: website + ' ' + '(Procrastination)',
                     }
@@ -140,11 +146,11 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                     console.log('procrastination', procrastination)
                     if (isSliced) {
                         let sliceDiff = Math.floor(((new Date(origAppEndTime) - startTime) / 1000) / 60)
-
+                        let sliceID = prosID + 1
                         let slice = {
                             allDay: false,
                             endDate: addMinutes(prosEnd, sliceDiff).toLocaleString('en'),
-                            id: startingAddedId,
+                            id: sliceID,
                             startDate: addMinutes(startTime, duration).toLocaleString('en'),
                             title: appoinments[slicedIdx].title + ' (Delayed)',
                         }
