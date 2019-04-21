@@ -22,17 +22,17 @@ function initFirebase(config) {
   fireProj = firebase.initializeApp(config);
 }
 
-function startPolling() {
+function fetchConfig() {
   var db = fireProj.database().ref();
 
-  function fetchConfig() {
-    db.on("value", (snapshot) => {
-      var dbConfig = snapshot.val()[userId].config
-      console.log(dbConfig)
-      chrome.storage.sync.set({config: dbConfig}, () => {});
-    })
-  }
+  db.on("value", (snapshot) => {
+    var dbConfig = snapshot.val()[userId].config
+    console.log(dbConfig)
+    chrome.storage.sync.set({config: dbConfig}, () => {});
+  })
+}
 
+function startPolling() {
   function poll() {
     setTimeout(fetchConfig, 5000);
   };
@@ -152,6 +152,8 @@ function buttonClickCallback(notifId, btnId) {
 chrome.runtime.onInstalled.addListener(function() {
   chrome.storage.sync.clear();
 
-  startPolling();
+  fetchConfig();
   chrome.notifications.onButtonClicked.addListener(buttonClickCallback)
+
+  startPolling();
 });
