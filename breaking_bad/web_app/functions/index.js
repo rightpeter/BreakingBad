@@ -122,11 +122,12 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
 
                     let prosEnd = endTime //addMinutes(startTime, duration)
                     const startingAddedId = appoinments.length > 0 ? appoinments[appoinments.length - 1].id + 1 : 0;
-                    let prosID = startingAddedId + 1
+                    console.log('startingAddedId', startingAddedId)
+
                     let procrastination = {
                         allDay: false,
                         endDate: prosEnd.toLocaleString('en'),
-                        id: prosID,
+                        id: Math.random(),
                         startDate: startTime.toLocaleString('en'),
                         title: website + ' ' + '(Procrastination)',
                     }
@@ -146,7 +147,7 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                     console.log('procrastination', procrastination)
                     if (isSliced) {
                         let sliceDiff = Math.floor(((new Date(origAppEndTime) - startTime) / 1000) / 60)
-                        let sliceID = prosID + 1
+                        let sliceID = Math.random()
                         let slice = {
                             allDay: false,
                             endDate: addMinutes(prosEnd, sliceDiff).toLocaleString('en'),

@@ -232,7 +232,7 @@ class Calendar extends React.Component {
 
         const startTime = new Date("Mon Apr 15 2019 12:45:00")
         const duration = 30
-        const startTime2 = new Date("Mon Apr 17 2019 11:30:00")
+        const startTime2 = new Date("Mon Apr 17 2019 11:40:00")
         const duration2 = 30
 
         /* Above is test */
