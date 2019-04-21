@@ -19,16 +19,47 @@ exports.dbTest = functions.database.ref('/{uid}/ignore')
     });
 
 exports.dbTest2 = functions.database.ref('/{uid}/ignore')
-    .onCreate((snapshot, context) => {
+    .onCreate((snapshotIgnore, context) => {
 
-        const uid = context.params.uid
-        console.log(`Current User ${uid}`)
+        const uid = context.params.uid;
 
-        // Data added at the location
-        const ignoreData = snapshot.val()
-        const endTime = new Date(ignoreData.endTime).toString()
+        admin.database().ref(`/${uid}/schedule`)
+            .once('value', snapshotSchedule => {
+                console.log(snapshotSchedule);
+                console.log(snapshotSchedule.val());
+                console.log(snapshotSchedule.val()[0]);
 
-        // ref matches `/{uid}/ignore`
-        return snapshot.ref.update({ endTime: endTime})
 
-    });
+
+
+                return snapshotSchedule.val() //snapshotIgnore.ref.parent.child('schedule').set(scheduleArr);
+            }).then(scheduleObj => {
+                console.log('scheduleObj', scheduleObj)
+            });
+
+        let scheduleArr = [
+            {
+
+                allDay: false,
+                endDate: new Date().toString(),
+                id: 100,
+                startDate: new Date().toString(),
+                title: 'test'
+
+            }
+        ]
+
+        scheduleArr = [
+            ...scheduleArr,
+            {
+                allDay: false,
+                endDate: new Date().toString(),
+                id: 200,
+                startDate: new Date().toString(),
+                title: 'test2'
+
+            }
+        ];
+
+        return snapshotIgnore.ref.parent.child('schedule').set(scheduleArr);
+});
