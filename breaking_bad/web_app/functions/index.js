@@ -4,25 +4,12 @@ admin.initializeApp(functions.config().firebase)
 // // Create and Deploy Your First Cloud Functions - All runs in the Firebase Server, not in the Browser
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
-exports.dbTest = functions.database.ref('/{uid}/ignore')
-    .onUpdate((change, context) => {
-
-        const before = change.before.val()
-        const after = change.after.val()
-
-        //  if (before.text === after.text) {
-        //      return null
-        //  }
-
-        return null; // change.after.ref.child('new').set('dddddd')
-
-    });
 
 const addMinutes = (date, minutes) => {
     return new Date(date.getTime() + minutes * 60000);
 }
 
-exports.dbTest2 = functions.database.ref('/{uid}/ignore')
+exports.addProcrastination = functions.database.ref('/{uid}/ignore')
     .onCreate((snapshotIgnore, context) => {
 
         let isSliced = false
@@ -33,27 +20,19 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
         const endTime = new Date(ignoreData.endTime)
         const website = ignoreData.website
 
-        console.log('ignore', ignoreData, endTime, website)
-
         const uid = context.params.uid;
 
         admin.database().ref(`/${uid}/config`)
             .once('value', snapshotConfig => {
 
-                console.log('retrieved data', ignoreData, endTime, website, snapshotConfig.val().sec_timeout)
-                
-                const duration = snapshotConfig.val().sec_timeout // minute (int)
+                const duration = snapshotConfig.val().sec_timeout
                 const startTime = addMinutes(new Date(endTime), -duration)
-                console.log('startTime', startTime)
+
                 admin.database().ref(`/${uid}/schedule`)
                 .once('value', snapshotSchedule => {
 
-                    console.log(snapshotSchedule);
-                    console.log(snapshotSchedule.val());
-                    console.log(snapshotSchedule.val()[0]);
-    
                     let appoinments = snapshotSchedule.val()
-                    console.log('BEFORE', appoinments)
+
                     // sort by start date
                     appoinments.sort(function (a, b) {
                         return new Date(a.startDate) - new Date(b.startDate);
@@ -63,11 +42,6 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                     for (let idx in appoinments) {
                         // When the procrastination causes slice in the schedule
                         let endTime = addMinutes(startTime, duration)
-                        console.log('TITLE :', (appoinments[idx].title))
-                        console.log('(new Date(appoinments[idx].startDate)', (new Date(appoinments[idx].startDate)))
-                        console.log('startTime', startTime)
-                        console.log('new Date(appoinments[idx].endDate)', new Date(appoinments[idx].endDate))
-                        console.log('endTime', endTime)
                         if (((new Date(appoinments[idx].startDate) <= startTime) && (startTime <= new Date(appoinments[idx].endDate))) ||
                             ((new Date(appoinments[idx].startDate) <= startTime) && (endTime <= new Date(appoinments[idx].endDate)))) {
                             origAppEndTime = new Date(appoinments[idx].endDate)
@@ -94,11 +68,6 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                                         startDate: addMinutes(new Date(appoinments[idx].startDate), diff).toLocaleString('en'),
                                         title: appoinments[idx].title,
                                     }
-                                    /*appoinments[idx] = {
-                                        ...appoinments[idx],
-                                        startDate: this.addMinutes(new Date(appoinments[idx].startDate), diff).toString(),
-                                        endDate: this.addMinutes(new Date(appoinments[idx].endDate), diff).toString()
-                                    }*/
                                 }
                             }
                         }
@@ -120,9 +89,7 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                         }
                     }
 
-                    let prosEnd = endTime //addMinutes(startTime, duration)
-                    const startingAddedId = appoinments.length > 0 ? appoinments[appoinments.length - 1].id + 1 : 0;
-                    console.log('startingAddedId', startingAddedId)
+                    let prosEnd = endTime
 
                     let procrastination = {
                         allDay: false,
@@ -132,19 +99,11 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                         title: website + ' ' + '(Procrastination)',
                     }
 
-                    /*data = [
-                        ...data,
-                        {
-                            id: startingAddedId,
-                            ...procrastination,
-                        },
-                    ];*/
-
                     appoinments = [
                         ...appoinments,
                         procrastination
                     ]
-                    console.log('procrastination', procrastination)
+
                     if (isSliced) {
                         let sliceDiff = Math.floor(((new Date(origAppEndTime) - startTime) / 1000) / 60)
                         let sliceID = Math.random()
@@ -155,14 +114,6 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                             startDate: addMinutes(startTime, duration).toLocaleString('en'),
                             title: appoinments[slicedIdx].title + ' (Delayed)',
                         }
-                        console.log('SLICE', slice)
-                        /*data = [
-                            ...data,
-                            {
-                                id: startingAddedId + 1,
-                                ...slice,
-                            },
-                        ];*/
 
                         appoinments = [
                             ...appoinments,
@@ -171,8 +122,7 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                     
                     
                     }
-                    console.log('AFTER', appoinments)
-                    
+
                     const finalAppointments = appoinments;
 
                     // update DB
@@ -180,33 +130,6 @@ exports.dbTest2 = functions.database.ref('/{uid}/ignore')
                 })
                 // return snapshotConfig.val() //snapshotIgnore.ref.parent.child('schedule').set(scheduleArr);
             })
-
-        /*
-        
-        */
-        /* let scheduleArr = [
-            {
-
-                allDay: false,
-                endDate: new Date().toString(),
-                id: 100,
-                startDate: new Date().toString(),
-                title: 'test'
-
-            }
-        ]
-
-        scheduleArr = [
-            ...scheduleArr,
-            {
-                allDay: false,
-                endDate: new Date().toString(),
-                id: 200,
-                startDate: new Date().toString(),
-                title: 'test2'
-
-            }
-        ]; */
 
         return null;
 });
