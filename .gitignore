@@ -6,4 +6,5 @@
 
 .DS_Store
 
-config.js
+*config.js
+breaking_bad/plugin/config.json
