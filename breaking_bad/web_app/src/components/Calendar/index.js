@@ -233,7 +233,7 @@ class Calendar extends React.Component {
         const startTime = new Date("Mon Apr 15 2019 12:45:00")
         const duration = 30
         const startTime2 = new Date("Mon Apr 17 2019 11:30:00")
-        const duration2 = 40
+        const duration2 = 30
 
         /* Above is test */
 
@@ -269,8 +269,8 @@ class Calendar extends React.Component {
                 
                     <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Feedback</h3>
                     <p className="date-header">Date: {this.state.selectedDate.toLocaleDateString()}</p>
-                    <Accordion defaultActiveKey={0}>
-                        {
+                    <Accordion>
+                        {   
                             this.state.data.map((obj, idx) => {
                                 // filter out the current date schedule
                                 if (new Date(obj.startDate).getDate() === (this.state.selectedDate).getDate()) {
