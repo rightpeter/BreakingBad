@@ -216,6 +216,7 @@ class Calendar extends React.Component {
         this.setState({ data });
     }
 
+
     formatDate = (date) => {
         let dateStr = date.toDateString()
         let timeStr = date.toTimeString().split(' ')[0]
@@ -224,8 +225,8 @@ class Calendar extends React.Component {
     }
 
     render() {
-        console.log('re-render', this.state.data, this.state.selectedDate)
-        const { data, currentDate } = this.state;
+        console.log('re-render', this.state.data)
+        const { data } = this.state;
 
         /* Below is test. Remove later. */
 
@@ -240,14 +241,14 @@ class Calendar extends React.Component {
             <div className="row" style={{padding: '0.5em'}}>
                 <div className="col-md-9">
                     <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h3>
-                    {/*<center>
+                    <center>
                         <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination (Procrastinate from 12:45 PM to 1:15 PM)</button>
                         <button onClick={(e) => this.addProcrastination(e, data, startTime2, duration2, 'Procrastination')}>Test Add Procrastination (Procrastinate from 11:30 AM to 12:10 PM)</button>
-                    </center>*/}
+                    </center>
                     <MuiThemeProvider theme={theme}>
                         <Paper>
                             <Scheduler data={data}>
-                                <ViewState currentDate={currentDate} />
+                                <ViewState currentDate={new Date('Sun Apr 14 2019')} />
                                 <EditingState onCommitChanges={this.commitChanges} />
                                 <WeekView
                                     startDayHour={9}
@@ -276,7 +277,7 @@ class Calendar extends React.Component {
                                     return (
                                         <Card>
                                             <Accordion.Toggle as={Card.Header} eventKey={idx}>
-                                                <span class="glyphicon glyphicon-chevron-down"></span>{obj.title}
+                                                <span className="glyphicon glyphicon-chevron-down"></span>{obj.title}
                                             </Accordion.Toggle>
                                             <Accordion.Collapse eventKey={idx}>
                                                 <Card.Body>

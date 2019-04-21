@@ -4,35 +4,31 @@ admin.initializeApp(functions.config().firebase)
 // // Create and Deploy Your First Cloud Functions - All runs in the Firebase Server, not in the Browser
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
-    response.send("Hello from Firebase!");
-});
+exports.dbTest = functions.database.ref('/{uid}/ignore')
+    .onUpdate((change, context) => {
 
-const createNotification = (notification => {
-    return admin.firestore().collection('notifications')
-        .add(notification)
-        .then(doc => console.log('notification added', doc))
-})
+        const before = change.before.val()
+        const after = change.after.val()
 
-exports.creationTest = functions.firestore
-    .document('projects/{projectId}')
-    .onCreate(doc => {
+        //  if (before.text === after.text) {
+        //      return null
+        //  }
 
-        const project = doc.date();
-        const notification = {
-            content: 'Added a new project',
-            user: `${project.authorFirstName} ${project.authorLastName}`,
-            time: admin.firestore.FieldValue.serverTimestamp()
-        }
+        return null; // change.after.ref.child('new').set('dddddd')
 
-        return createNotification(notification);
-    })
+    });
 
-exports.dbTest = functions.database.ref('/test/{id}')
-    .onCreate(event => {
-        const data = event.val()
-        const newData = {
-            msg: data.msg.toUpperCase()
-        };
-        return event.ref.parent.child('copiedData').set(newData);
-    })
+exports.dbTest2 = functions.database.ref('/{uid}/ignore')
+    .onCreate((snapshot, context) => {
+
+        const uid = context.params.uid
+        console.log(`Current User ${uid}`)
+
+        // Data added at the location
+        const ignoreData = snapshot.val()
+        const endTime = new Date(ignoreData.endTime).toString()
+
+        // ref matches `/{uid}/ignore`
+        return snapshot.ref.update({ endTime: endTime})
+
+    });
