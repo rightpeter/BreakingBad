@@ -144,10 +144,10 @@ exports.addProcrastinationOnUpdate = functions.database.ref('/{uid}/ignore')
         
         const ignoreData = change.after.val()
         const endTime = new Date(ignoreData.endTime)
-        let website = change.after.val().website
+        let website = change.after.val().websites
 
         if (website === undefined) {
-            website = change.before.val().website
+            website = change.before.val().websites
         }
 
         const uid = context.params.uid;

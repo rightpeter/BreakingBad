@@ -20,6 +20,24 @@ const DayScaleCell = (props, func) => (
     <WeekView.DayScaleCell {...props} onClick={() => func(props.startDate)} />
   );
 
+  const CustomAppointment = ({ style, ...restProps }) => {
+    if (restProps.data.title.includes('(Procrastination'))
+      return (
+        <Appointments.Appointment
+          {...restProps}
+          style={{ ...style, backgroundColor: "red" }}
+          className="procrasination"
+        />
+      );
+      return (
+        <Appointments.Appointment
+          {...restProps}
+          style={style}
+          className="CLASS_ROOM3"
+        />
+      );
+  };
+
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
@@ -265,7 +283,7 @@ class Calendar extends React.Component {
                                     endDayHour={19}
                                     dayScaleCellComponent={e => DayScaleCell(e, this.changeCurrDate)}
                                 />
-                                <Appointments />
+                                <Appointments appointmentComponent={CustomAppointment} />
                                 <AppointmentTooltip
                                     showOpenButton
                                     showDeleteButton
