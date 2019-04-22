@@ -4,6 +4,7 @@ import './App.css';
 import Login from './components/Login';
 import Home from './Home';
 import UserConfig from './components/UserConfig'
+import Main from './components/Main'
 import Calendar from './components/Calendar'
 import HelpPage from './components/HelpPage'
 import { BrowserRouter, Route } from "react-router-dom";

@@ -25,7 +25,7 @@ class Navbar extends React.Component {
         <div className="navbar">
           <div className="logo-container">
             {/*<img src={Logo}></img>*/}
-            <span className="logo">Breaking Bad</span>
+            <Link style={{ textDecoration: 'none' }} to="/"><span className="logo">Breaking Bad</span></Link>
           </div> 
           <div className="left-link-container">
           </div>
