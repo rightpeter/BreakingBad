@@ -19,11 +19,7 @@ class UserConfig extends Component {
 
     // Load config info from DB
     componentDidMount = () => {
-
-
-
         fire.auth().onAuthStateChanged((user) => {
-            console.log('user', user);
             if (user) {
                 this.setState({ user });
                 localStorage.setItem('user', user.uid);
@@ -47,8 +43,6 @@ class UserConfig extends Component {
                 localStorage.removeItem('user')
             }
         });
-
-
     }
 
     addConfigToDB = (e) => {

@@ -7,6 +7,11 @@
     background: #55acf3;
   }
   
+  .logo {
+    font-size: 1.5em;
+    color: white;
+  }
+
   .logo-container > img {
     max-height: 200%;
     width: 68px;

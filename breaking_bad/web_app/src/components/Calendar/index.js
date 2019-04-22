@@ -34,11 +34,8 @@ class Calendar extends React.Component {
         };
     }
 
-
     componentDidMount = () => {
-        
         fire.auth().onAuthStateChanged((user) => {
-            console.log('user', user);
             if (user) {
                 this.setState({ user });
                 localStorage.setItem('user', user.uid);
@@ -53,14 +50,11 @@ class Calendar extends React.Component {
                         data: scheduleArr,
                     })
                 })
-
             } else {
                 this.setState({ user: null });
                 localStorage.removeItem('user')
             }
         });
-
-        
     }
 
     changeCurrDate = (date) => {
@@ -264,10 +258,10 @@ class Calendar extends React.Component {
                     <MuiThemeProvider theme={theme}>
                         <Paper>
                             <Scheduler data={data}>
-                                <ViewState currentDate={new Date('Sun Apr 14 2019')} />
+                                <ViewState currentDate={this.state.currentDate} />
                                 <EditingState onCommitChanges={this.commitChanges} />
                                 <WeekView
-                                    startDayHour={9}
+                                    startDayHour={3}
                                     endDayHour={19}
                                     dayScaleCellComponent={e => DayScaleCell(e, this.changeCurrDate)}
                                 />
