@@ -54,9 +54,9 @@ function creationCallback(notifId, website) {
 }
 
 async function createNotification(sleepTime, website) {
-  await sleep(sleepTime * 60 * 1000);
+  // await sleep(sleepTime * 60 * 1000);
   //console.log("sleepTime: " + sleepTime);
-  //await sleep(sleepTime * 1000);
+  await sleep(sleepTime * 1000);
 
   var opt = {
     type: 'basic',
@@ -76,8 +76,8 @@ async function createNotification(sleepTime, website) {
 }
 
 async function ignoreNotification(sleepTime, website) {
-  await sleep(sleepTime * 60 * 1000);
-  //await sleep(sleepTime * 1000);
+  // await sleep(sleepTime * 60 * 1000);
+  await sleep(sleepTime * 1000);
   //console.log("IgnoreNotification!");
 
   chrome.storage.sync.get(website, (items) => {
@@ -85,7 +85,7 @@ async function ignoreNotification(sleepTime, website) {
       chrome.storage.sync.remove(website, () => {
         const ignoreMessage = {
             websites: website,
-            endTime: Date.now(),
+            endTime: Date.now().toLocaleString('en'),
         }
 
         fireProj.database().ref(userId).child("ignore").set(ignoreMessage, () => {
@@ -113,9 +113,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
               var save = {};
               save[website] = true;
               chrome.storage.sync.set(save, () => {
-                createNotification(dbConfig.first_timeout, website);
-                createNotification(dbConfig.sec_timeout, website);
-                ignoreNotification(dbConfig.sec_timeout + 1, website);
+                // createNotification(dbConfig.first_timeout, website);
+                // createNotification(dbConfig.sec_timeout, website);
+                // ignoreNotification(dbConfig.sec_timeout + 1, website);
+                createNotification(10, website);
+                createNotification(30, website);
+                ignoreNotification(35, website);
                 //createNotification(1, website);
                 //createNotification(10, website);
                 //ignoreNotification(11, website);
