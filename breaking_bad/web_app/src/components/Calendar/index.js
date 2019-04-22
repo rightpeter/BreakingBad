@@ -24,7 +24,8 @@ class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId: fire.auth().currentUser.uid,
+            user: {},
+            currUser: fire.auth(),
             data: appointments,
             currentDate: new Date(), // set to today's date by default
             message: '',
@@ -35,16 +36,31 @@ class Calendar extends React.Component {
 
 
     componentDidMount = () => {
-        // load data from DB
-        let self = this
-        let database = fire.database().ref();
-        let userId = this.state.userId
-        database.on("value", function (snapshot) {
-            let scheduleArr = snapshot.val()[userId].schedule
-            self.setState({
-                data: scheduleArr,
-            })
-        })
+        
+        fire.auth().onAuthStateChanged((user) => {
+            console.log('user', user);
+            if (user) {
+                this.setState({ user });
+                localStorage.setItem('user', user.uid);
+
+                // load data from DB
+                let self = this
+                let database = fire.database().ref();
+                let userId = this.state.user.uid
+                database.on("value", function (snapshot) {
+                    let scheduleArr = snapshot.val()[userId].schedule
+                    self.setState({
+                        data: scheduleArr,
+                    })
+                })
+
+            } else {
+                this.setState({ user: null });
+                localStorage.removeItem('user')
+            }
+        });
+
+        
     }
 
     changeCurrDate = (date) => {

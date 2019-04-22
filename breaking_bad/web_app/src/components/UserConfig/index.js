@@ -8,6 +8,7 @@ class UserConfig extends Component {
         super(props);
         this.reset = this.reset.bind(this);
         this.state = {
+            user: {},
             websites: [],
             entertainments: [],
             first_timeout: 0,
@@ -18,19 +19,36 @@ class UserConfig extends Component {
 
     // Load config info from DB
     componentDidMount = () => {
-        let self = this
-        let database = fire.database().ref();
-        let uid = fire.auth().currentUser.uid
-        database.on("value", function (snapshot) {
-            let websitesDB = snapshot.val()[uid].config.websites
-            let first_timeoutDB = snapshot.val()[uid].config.first_timeout
-            let sec_timeoutDB = snapshot.val()[uid].config.sec_timeout
-            self.setState({
-                websites: websitesDB,
-                first_timeout: first_timeoutDB,
-                sec_timeout: sec_timeoutDB,
-            })
-        })
+
+
+
+        fire.auth().onAuthStateChanged((user) => {
+            console.log('user', user);
+            if (user) {
+                this.setState({ user });
+                localStorage.setItem('user', user.uid);
+
+                let self = this
+                let database = fire.database().ref();
+                let uid = fire.auth().currentUser.uid
+                database.on("value", function (snapshot) {
+                    let websitesDB = snapshot.val()[uid].config.websites
+                    let first_timeoutDB = snapshot.val()[uid].config.first_timeout
+                    let sec_timeoutDB = snapshot.val()[uid].config.sec_timeout
+                    self.setState({
+                        websites: websitesDB,
+                        first_timeout: first_timeoutDB,
+                        sec_timeout: sec_timeoutDB,
+                    })
+                })
+
+            } else {
+                this.setState({ user: null });
+                localStorage.removeItem('user')
+            }
+        });
+
+
     }
 
     addConfigToDB = (e) => {
