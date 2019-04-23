@@ -102,11 +102,11 @@ class UserConfig extends Component {
         return (
             <div className="row center">
                 <div className="col-md-6">
-                    <h1>Bad Habit Setting</h1>
+                    <h1>Settings</h1>
                     <p className="message">{this.state.message}</p>
                     <form className="form-style">
                         <div className="form-group">
-                            <label style={{ display: "inherit" }}>Add Bothering Websites</label>
+                            <label style={{ display: "inherit" }}>Websites you Procrastinate on</label>
                             {
                                 this.state.websites.map((url, idx) => {
                                     return (

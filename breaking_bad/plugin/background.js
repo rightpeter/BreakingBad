@@ -10,7 +10,7 @@ var notifIdCounter = 0;
 var fireProj;
 
 const configURL = chrome.runtime.getURL('config.json')
-const HOMEURL = "https://breaking-bad-b34cc.firebaseapp.com"
+const HOMEURL = "localhost:3000"
 // in seconds
 const TEST_FIRST_TIMEOUT = 10
 const TEST_SECOND_TIMEOUT = 30
@@ -122,7 +122,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                 // ignoreNotification(dbConfig.sec_timeout + 1, website);
                 createNotification(TEST_FIRST_TIMEOUT, website);
                 createNotification(TEST_SECOND_TIMEOUT, website);
-                ignoreNotification(TEST_SECOND_TIMEOUT+5, website);
+                ignoreNotification(TEST_SECOND_TIMEOUT + 30, website);
               })
             }
           })
