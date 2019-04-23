@@ -66,7 +66,7 @@ async function createNotification(sleepTime, website) {
     type: 'basic',
     title: 'Are you procrastinating again?',
     message: 'You\'ve watched ' + website + ' for ' + sleepTime + ' min\nIs everything OK?',
-    iconUrl: 'images/tired_face.jpg',
+    iconUrl: 'images/tired_face.png',
     buttons: [{
       title: 'I need help!',
     }, {

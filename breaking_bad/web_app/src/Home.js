@@ -3,7 +3,6 @@ import Navbar from "./common/Navbar";
 import React, { Component } from 'react';
 import fire from './config/Fire';
 import Login from './components/Login';
-import  { Redirect } from 'react-router-dom'
 import './App.css';
 
 class Home extends Component {
