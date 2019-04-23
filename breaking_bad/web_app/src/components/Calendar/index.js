@@ -333,7 +333,7 @@ class Calendar extends React.Component {
                                                                 <Form.Label>Note</Form.Label>
                                                                 <Form.Control onChange={(e) => this.handleFeedbackChange(e, idx)} value={obj.feedback} as="textarea" rows="3" />
                                                             </Form.Group>
-                                                            <button type="submit" onClick={this.saveFeedback} className="btn btn-primary">Save Feedback</button>
+                                                            <button type="submit" onClick={this.saveFeedback} className="btn btn-primary">Save Note</button>
                                                         </Form>
                                                     </div>
                                                 </Card.Body>
