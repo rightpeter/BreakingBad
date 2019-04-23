@@ -130,7 +130,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                 // ignoreNotification(dbConfig.sec_timeout + 1, website);
                 createNotification(TEST_FIRST_TIMEOUT, website);
                 createNotification(TEST_SECOND_TIMEOUT, website);
-                ignoreNotification(TEST_SECOND_TIMEOUT + 30, website);
+                ignoreNotification(TEST_SECOND_TIMEOUT + 2, website);
               })
             }
           })
