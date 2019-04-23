@@ -85,7 +85,7 @@ async function ignoreNotification(sleepTime, website) {
       chrome.storage.sync.remove(website, () => {
         const ignoreMessage = {
             websites: website,
-            endTime: Date.now().toLocaleString('en'),
+            endTime: new Date().toLocaleString('en'),
         }
 
         fireProj.database().ref(userId).child("ignore").set(ignoreMessage, () => {
