@@ -74,9 +74,17 @@ async function createNotification(sleepTime, website) {
     }],
   };
 
-  chrome.notifications.create(opt, (notifId) => {
-    creationCallback(notifId, website);
-  });
+  chrome.storage.sync.get(website, (items) => {
+    if (Object.keys(items).length !== 0) {
+      chrome.storage.sync.remove(website, () => {
+        chrome.notifications.create(opt, (notifId) => {
+          creationCallback(notifId, website);
+        });
+      });
+    } else {
+      console.log("timeout has been deleted!");
+    }
+  })
 }
 
 async function ignoreNotification(sleepTime, website) {
