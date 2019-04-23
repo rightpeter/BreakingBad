@@ -13,30 +13,32 @@ import { blue } from "@material-ui/core/colors";
 import { appointments } from "./data";
 import fire from '../../config/Fire';
 import { Accordion, Card, Form } from 'react-bootstrap';
+import { FaRegSmile, FaRegFrown } from "react-icons/fa";
+import './styles.css'
 
 const theme = createMuiTheme({ palette: { type: "light", primary: blue } });
 
 const DayScaleCell = (props, func) => (
     <WeekView.DayScaleCell {...props} onClick={() => func(props.startDate)} />
-  );
+);
 
-  const CustomAppointment = ({ style, ...restProps }) => {
+const CustomAppointment = ({ style, ...restProps }) => {
     if (restProps.data.title.includes('(Procrastination'))
-      return (
+        return (
+            <Appointments.Appointment
+                {...restProps}
+                style={{ ...style, backgroundColor: "red" }}
+                className="procrasination"
+            />
+        );
+    return (
         <Appointments.Appointment
-          {...restProps}
-          style={{ ...style, backgroundColor: "red" }}
-          className="procrasination"
+            {...restProps}
+            style={style}
+            className="CLASS_ROOM3"
         />
-      );
-      return (
-        <Appointments.Appointment
-          {...restProps}
-          style={style}
-          className="CLASS_ROOM3"
-        />
-      );
-  };
+    );
+};
 
 class Calendar extends React.Component {
     constructor(props) {
@@ -86,6 +88,25 @@ class Calendar extends React.Component {
         let newState = Object.assign({}, this.state.data)
         newState[idx].feedback = e.target.value
         this.setState(newState)
+    }
+
+    handlePosNegChange = (e, idx) => {
+        console.log(e, idx)
+        let newState = Object.assign({}, this.state.data)
+        newState[idx].isPositive = e
+        this.setState(newState)
+        let username = fire.auth().currentUser.uid
+        const ref = fire.database().ref(username)
+        const scheduleRef = ref.child("schedule")
+        scheduleRef.set(this.state.data).then((u) => {
+            this.setState({
+                message: 'Setting has been updated successfully!'
+            })
+        }).catch((error) => {
+            this.setState({
+                message: error
+            })
+        });
     }
 
     saveFeedback = (e) => {
@@ -253,34 +274,20 @@ class Calendar extends React.Component {
     }
 
     render() {
-        console.log('re-render', this.state.data)
         const { data } = this.state;
 
-        /* Below is test. Remove later. */
-
-        const startTime = new Date("Mon Apr 15 2019 12:45:00")
-        const duration = 30
-        const startTime2 = new Date("Mon Apr 17 2019 11:40:00")
-        const duration2 = 30
-
-        /* Above is test */
-
         return (
-            <div className="row" style={{padding: '0.5em'}}>
+            <div className="row" style={{ padding: '0.5em' }}>
                 <div className="col-md-9">
                     <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h3>
-                    <center>
-                        <button onClick={(e) => this.addProcrastination(e, data, startTime, duration, 'Procrastination')}>Test Add Procrastination (Procrastinate from 12:45 PM to 1:15 PM)</button>
-                        <button onClick={(e) => this.addProcrastination(e, data, startTime2, duration2, 'Procrastination')}>Test Add Procrastination (Procrastinate from 11:30 AM to 12:10 PM)</button>
-                    </center>
                     <MuiThemeProvider theme={theme}>
                         <Paper>
                             <Scheduler data={data}>
                                 <ViewState currentDate={this.state.currentDate} />
                                 <EditingState onCommitChanges={this.commitChanges} />
                                 <WeekView
-                                    startDayHour={3}
-                                    endDayHour={19}
+                                    startDayHour={0}
+                                    endDayHour={23}
                                     dayScaleCellComponent={e => DayScaleCell(e, this.changeCurrDate)}
                                 />
                                 <Appointments appointmentComponent={CustomAppointment} />
@@ -293,12 +300,12 @@ class Calendar extends React.Component {
                         </Paper>
                     </MuiThemeProvider>
                 </div>
-                <div className="col-md-3" style={{textAlign: 'center'}}>
-                
+                <div className="col-md-3" style={{ textAlign: 'center' }}>
+
                     <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Feedback</h3>
                     <p className="date-header">Date: {this.state.selectedDate.toLocaleDateString()}</p>
                     <Accordion>
-                        {   
+                        {
                             this.state.data.map((obj, idx) => {
                                 // filter out the current date schedule
                                 if (new Date(obj.startDate).getDate() === (this.state.selectedDate).getDate()) {
@@ -316,9 +323,14 @@ class Calendar extends React.Component {
                                                         <p>End Time: {this.formatDate(new Date(obj.endDate))}</p>
                                                     </div>
                                                     <div>
-                                                        <Form style={{backgroundColor: 'white'}}>
+                                                        <Form style={{ backgroundColor: 'white' }}>
+                                                            <Form.Label>Personal Feedback</Form.Label>
+                                                            <div className="icon-box" style={{marginTop: '1em', marginBottom: '1em'}}>
+                                                                <FaRegSmile onClick={(e) => this.handlePosNegChange(true, idx)} className="happy" style={{ color: obj.isPositive === true ? "rgb(33, 175, 64)" : 'black' }}/>
+                                                                <FaRegFrown onClick={(e) => this.handlePosNegChange(false, idx)} className="sad" style={{ color: obj.isPositive === false ? "rgb(214, 68, 68)" : 'black' }}/>
+                                                            </div>
                                                             <Form.Group controlId="exampleForm.ControlTextarea1">
-                                                                <Form.Label>Personal Feedback</Form.Label>
+                                                                <Form.Label>Note</Form.Label>
                                                                 <Form.Control onChange={(e) => this.handleFeedbackChange(e, idx)} value={obj.feedback} as="textarea" rows="3" />
                                                             </Form.Group>
                                                             <button type="submit" onClick={this.saveFeedback} className="btn btn-primary">Save Feedback</button>
