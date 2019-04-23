@@ -10,6 +10,10 @@ var notifIdCounter = 0;
 var fireProj;
 
 const configURL = chrome.runtime.getURL('config.json')
+const HOMEURL = "https://breaking-bad-b34cc.firebaseapp.com"
+// in seconds
+const TEST_FIRST_TIMEOUT = 10
+const TEST_SECOND_TIMEOUT = 30
 
 fetch(configURL)
   .then((response) => response.json())
@@ -64,9 +68,9 @@ async function createNotification(sleepTime, website) {
     message: 'You\'ve watched ' + website + ' for ' + sleepTime + ' min\nIs everything OK?',
     iconUrl: 'images/tired_face.jpg',
     buttons: [{
-      title: 'Oh, I will stop right now!',
+      title: 'I need help!',
     }, {
-      title: 'I have to do this, let\'s reschecdule!',
+      title: 'Go to calendar!',
     }],
   };
 
@@ -116,12 +120,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                 // createNotification(dbConfig.first_timeout, website);
                 // createNotification(dbConfig.sec_timeout, website);
                 // ignoreNotification(dbConfig.sec_timeout + 1, website);
-                createNotification(10, website);
-                createNotification(30, website);
-                ignoreNotification(35, website);
-                //createNotification(1, website);
-                //createNotification(10, website);
-                //ignoreNotification(11, website);
+                createNotification(TEST_FIRST_TIMEOUT, website);
+                createNotification(TEST_SECOND_TIMEOUT, website);
+                ignoreNotification(TEST_SECOND_TIMEOUT+5, website);
               })
             }
           })
@@ -142,11 +143,11 @@ function buttonClickCallback(notifId, btnId) {
       console.log("notifId: " + notifId);
       console.log("btnId: " + btnId);
       if (btnId === 0) {
-        console.log("redirect google");
-        chrome.tabs.create({ url: "https://www.google.com" });
+        console.log("redirect help");
+        chrome.tabs.create({ url: HOMEURL + "/help " });
       } else if (btnId === 1){
-        console.log("redirect google");
-        chrome.tabs.create({ url: "https://www.google.com" });
+        console.log("redirect calendar");
+        chrome.tabs.create({ url: HOMEURL + "/calendar" });
       }
     });
   })
