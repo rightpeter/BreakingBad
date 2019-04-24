@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import fire from '../../config/Fire';
 import './styles.css';
+import Navbar from "../../common/Navbar";
 
 class UserConfig extends Component {
     constructor(props) {
@@ -70,7 +71,7 @@ class UserConfig extends Component {
         this.setState({
             websites: [...this.state.websites, ""]
         })
-    }   
+    }
 
     handleWebsiteChange = (e, idx) => {
         e.preventDefault();
@@ -100,36 +101,39 @@ class UserConfig extends Component {
 
     render() {
         return (
-            <div className="row center">
-                <div className="col-md-6">
-                    <h1>Settings</h1>
-                    <p className="message">{this.state.message}</p>
-                    <form className="form-style">
-                        <div className="form-group">
-                            <label style={{ display: "inherit" }}>Websites you Procrastinate on</label>
-                            {
-                                this.state.websites.map((url, idx) => {
-                                    return (
-                                        <div key={idx}>
-                                            <input style={{ marginRight: '.5em', width: "90%", display: "inline" }} className="form-control" onChange={(e) => this.handleWebsiteChange(e, idx)} value={url} />
-                                            <button className="btn btn-danger" onClick={(e) => this.handleRemove(e, idx)}>X</button>
-                                        </div>
-                                    )
-                                })
-                            }
-                            <button className="btn btn-primary margin-top" onClick={(e) => this.addWebsites(e)}>+</button>
-                        </div>
-                        <div className="form-group">
-                            <label for="exampleInputEmail1">First Timeout (seconds)</label>
-                            <input value={this.state.first_timeout} onChange={e => this.setState({ first_timeout: e.target.value })} type="number" name="first-timeout" className="form-control" id="first_timeout" aria-describedby="emailHelp" placeholder="Enter First Timeout (seconds)" />
-                        </div>
-                        <div className="form-group">
-                            <label for="exampleInputEmail1">Second Timeout (seconds)</label>
-                            <input value={this.state.sec_timeout} onChange={e => this.setState({ sec_timeout: e.target.value })} type="number" name="sec-timeout" className="form-control" id="sec_timeout" aria-describedby="emailHelp" placeholder="Enter Second Timeout (seconds)" />
-                        </div>
-                        <button type="submit" onClick={this.addConfigToDB} className="btn btn-primary">Confirm Settings</button>
-                        <button onClick={this.reset} style={{ marginLeft: '25px' }} className="btn btn-success">Reset</button>
-                    </form>
+            <div>
+                <Navbar/>
+                <div className="row center">
+                    <div className="col-md-6">
+                        <h1>Settings</h1>
+                        <p className="message">{this.state.message}</p>
+                        <form className="form-style">
+                            <div className="form-group">
+                                <label style={{ display: "inherit" }}>Websites you Procrastinate on</label>
+                                {
+                                    this.state.websites.map((url, idx) => {
+                                        return (
+                                            <div key={idx}>
+                                                <input style={{ marginRight: '.5em', width: "90%", display: "inline" }} className="form-control" onChange={(e) => this.handleWebsiteChange(e, idx)} value={url} />
+                                                <button className="btn btn-danger" onClick={(e) => this.handleRemove(e, idx)}>X</button>
+                                            </div>
+                                        )
+                                    })
+                                }
+                                <button className="btn btn-primary margin-top" onClick={(e) => this.addWebsites(e)}>+</button>
+                            </div>
+                            <div className="form-group">
+                                <label for="exampleInputEmail1">First Timeout (seconds)</label>
+                                <input value={this.state.first_timeout} onChange={e => this.setState({ first_timeout: e.target.value })} type="number" name="first-timeout" className="form-control" id="first_timeout" aria-describedby="emailHelp" placeholder="Enter First Timeout (seconds)" />
+                            </div>
+                            <div className="form-group">
+                                <label for="exampleInputEmail1">Second Timeout (seconds)</label>
+                                <input value={this.state.sec_timeout} onChange={e => this.setState({ sec_timeout: e.target.value })} type="number" name="sec-timeout" className="form-control" id="sec_timeout" aria-describedby="emailHelp" placeholder="Enter Second Timeout (seconds)" />
+                            </div>
+                            <button type="submit" onClick={this.addConfigToDB} className="btn btn-primary">Confirm Settings</button>
+                            <button onClick={this.reset} style={{ marginLeft: '25px' }} className="btn btn-success">Reset</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 

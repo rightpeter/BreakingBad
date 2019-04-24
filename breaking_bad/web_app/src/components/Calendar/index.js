@@ -15,6 +15,7 @@ import fire from '../../config/Fire';
 import { Accordion, Card, Form } from 'react-bootstrap';
 import { FaRegSmile, FaRegFrown } from "react-icons/fa";
 import './styles.css'
+import Navbar from "../../common/Navbar";
 
 const theme = createMuiTheme({ palette: { type: "light", primary: blue } });
 
@@ -277,76 +278,79 @@ class Calendar extends React.Component {
         const { data } = this.state;
 
         return (
-            <div className="row" style={{ padding: '0.5em' }}>
-                <div className="col-md-9">
-                    <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h3>
-                    <MuiThemeProvider theme={theme}>
-                        <Paper>
-                            <Scheduler data={data}>
-                                <ViewState currentDate={this.state.currentDate} />
-                                <EditingState onCommitChanges={this.commitChanges} />
-                                <WeekView
-                                    startDayHour={0}
-                                    endDayHour={23}
-                                    dayScaleCellComponent={e => DayScaleCell(e, this.changeCurrDate)}
-                                />
-                                <Appointments appointmentComponent={CustomAppointment} />
-                                <AppointmentTooltip
-                                    showOpenButton
-                                    showDeleteButton
-                                />
-                                <AppointmentForm />
-                            </Scheduler>
-                        </Paper>
-                    </MuiThemeProvider>
-                </div>
-                <div className="col-md-3" style={{ textAlign: 'center' }}>
+            <div>
+                <Navbar />
+                <div className="row" style={{ padding: '0.5em' }}>
+                    <div className="col-md-9">
+                        <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Your Schedule</h3>
+                        <MuiThemeProvider theme={theme}>
+                            <Paper>
+                                <Scheduler data={data}>
+                                    <ViewState currentDate={this.state.currentDate} />
+                                    <EditingState onCommitChanges={this.commitChanges} />
+                                    <WeekView
+                                        startDayHour={0}
+                                        endDayHour={23}
+                                        dayScaleCellComponent={e => DayScaleCell(e, this.changeCurrDate)}
+                                    />
+                                    <Appointments appointmentComponent={CustomAppointment} />
+                                    <AppointmentTooltip
+                                        showOpenButton
+                                        showDeleteButton
+                                    />
+                                    <AppointmentForm />
+                                </Scheduler>
+                            </Paper>
+                        </MuiThemeProvider>
+                    </div>
+                    <div className="col-md-3" style={{ textAlign: 'center' }}>
 
-                    <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Feedback</h3>
-                    <p className="date-header">Date: {this.state.selectedDate.toLocaleDateString()}</p>
-                    <Accordion>
-                        {
-                            this.state.data.map((obj, idx) => {
-                                // filter out the current date schedule
-                                if (new Date(obj.startDate).getDate() === (this.state.selectedDate).getDate()) {
-                                    return (
-                                        <Card>
-                                            <Accordion.Toggle as={Card.Header} eventKey={idx}>
-                                                <span className="glyphicon glyphicon-chevron-down"></span>{obj.title}
-                                            </Accordion.Toggle>
-                                            <Accordion.Collapse eventKey={idx}>
-                                                <Card.Body>
-                                                    <div>
-                                                        <p>Start Time: {this.formatDate(new Date(obj.startDate))}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p>End Time: {this.formatDate(new Date(obj.endDate))}</p>
-                                                    </div>
-                                                    <div>
-                                                        <Form style={{ backgroundColor: 'white' }}>
-                                                            <Form.Label>Personal Feedback</Form.Label>
-                                                            <div className="icon-box" style={{marginTop: '1em', marginBottom: '1em'}}>
-                                                                <FaRegSmile onClick={(e) => this.handlePosNegChange(true, idx)} className="happy" style={{ color: obj.isPositive === true ? "rgb(33, 175, 64)" : 'black' }}/>
-                                                                <FaRegFrown onClick={(e) => this.handlePosNegChange(false, idx)} className="sad" style={{ color: obj.isPositive === false ? "rgb(214, 68, 68)" : 'black' }}/>
-                                                            </div>
-                                                            <Form.Group controlId="exampleForm.ControlTextarea1">
-                                                                <Form.Label>Note</Form.Label>
-                                                                <Form.Control onChange={(e) => this.handleFeedbackChange(e, idx)} value={obj.feedback} as="textarea" rows="3" />
-                                                            </Form.Group>
-                                                            <button type="submit" onClick={this.saveFeedback} className="btn btn-primary">Save Note</button>
-                                                        </Form>
-                                                    </div>
-                                                </Card.Body>
-                                            </Accordion.Collapse>
-                                        </Card>
+                        <h3 style={{ marginBottom: '1.25em', marginTop: '1.25em', textAlign: 'center' }}>Feedback</h3>
+                        <p className="date-header">Date: {this.state.selectedDate.toLocaleDateString()}</p>
+                        <Accordion>
+                            {
+                                this.state.data.map((obj, idx) => {
+                                    // filter out the current date schedule
+                                    if (new Date(obj.startDate).getDate() === (this.state.selectedDate).getDate()) {
+                                        return (
+                                            <Card>
+                                                <Accordion.Toggle as={Card.Header} eventKey={idx}>
+                                                    <span className="glyphicon glyphicon-chevron-down"></span>{obj.title}
+                                                </Accordion.Toggle>
+                                                <Accordion.Collapse eventKey={idx}>
+                                                    <Card.Body>
+                                                        <div>
+                                                            <p>Start Time: {this.formatDate(new Date(obj.startDate))}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p>End Time: {this.formatDate(new Date(obj.endDate))}</p>
+                                                        </div>
+                                                        <div>
+                                                            <Form style={{ backgroundColor: 'white' }}>
+                                                                <Form.Label>Personal Feedback</Form.Label>
+                                                                <div className="icon-box" style={{ marginTop: '1em', marginBottom: '1em' }}>
+                                                                    <FaRegSmile onClick={(e) => this.handlePosNegChange(true, idx)} className="happy" style={{ color: obj.isPositive === true ? "rgb(33, 175, 64)" : 'black' }} />
+                                                                    <FaRegFrown onClick={(e) => this.handlePosNegChange(false, idx)} className="sad" style={{ color: obj.isPositive === false ? "rgb(214, 68, 68)" : 'black' }} />
+                                                                </div>
+                                                                <Form.Group controlId="exampleForm.ControlTextarea1">
+                                                                    <Form.Label>Note</Form.Label>
+                                                                    <Form.Control onChange={(e) => this.handleFeedbackChange(e, idx)} value={obj.feedback} as="textarea" rows="3" />
+                                                                </Form.Group>
+                                                                <button type="submit" onClick={this.saveFeedback} className="btn btn-primary">Save Note</button>
+                                                            </Form>
+                                                        </div>
+                                                    </Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
 
-                                    )
-                                } else {
-                                    return <div />
-                                }
-                            })
-                        }
-                    </Accordion>
+                                        )
+                                    } else {
+                                        return <div />
+                                    }
+                                })
+                            }
+                        </Accordion>
+                    </div>
                 </div>
             </div>
         );
