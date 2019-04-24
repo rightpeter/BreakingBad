@@ -10,7 +10,6 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { blue } from "@material-ui/core/colors";
-import { appointments } from "./data";
 import fire from '../../config/Fire';
 import { Accordion, Card, Form } from 'react-bootstrap';
 import { FaRegSmile, FaRegFrown } from "react-icons/fa";
@@ -47,7 +46,7 @@ class Calendar extends React.Component {
         this.state = {
             user: {},
             currUser: fire.auth(),
-            data: appointments,
+            data: []    ,
             currentDate: new Date(), // set to today's date by default
             message: '',
             open: false,

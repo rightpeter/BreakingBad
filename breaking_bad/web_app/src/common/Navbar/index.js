@@ -2,7 +2,7 @@
 import React from 'react';
 import fire from '../../config/Fire';
 import './styles.css';
-import Logo from '../../assets/logo.svg'
+import Logo from '../../assets/favicon.png'
 import { Link } from 'react-router-dom';
 
 class Navbar extends React.Component {
@@ -24,7 +24,6 @@ class Navbar extends React.Component {
       return(
         <div className="navbar">
           <div className="logo-container">
-            {/*<img src={Logo}></img>*/}
             <Link style={{ textDecoration: 'none' }} to="/"><span className="logo">Breaking Bad</span></Link>
           </div> 
           <div className="left-link-container">

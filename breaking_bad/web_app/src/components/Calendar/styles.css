@@ -29,3 +29,11 @@
 .sad:hover {
     fill: rgb(214, 68, 68);   
 }
+
+.date-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #55acf3;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    color: floralwhite;
+}

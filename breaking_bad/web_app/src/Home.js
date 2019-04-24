@@ -40,7 +40,7 @@ class Home extends Component {
             <div className="row center">
               <div className="col-md-12" style={{ padding: '3.5em' }}>
                 <div>
-                  <h1 style={{ fontSize: '3.8em', marginBottom: '0.8em' }}>Breaking Bad Habits</h1>
+                  <h1 style={{ fontSize: '4.3em', marginBottom: '0.8em' }}>Breaking Bad Habits</h1>
                   <p style={{ fontSize: '1.5em', padding: '0.5em' }}>Habits are routines, triggered by cues in hopes of a reward. Often, it is difficult to avoid the cue or change the routine. Our survey of personal tracking tools suggests that although they assist users in gathering data about their behaviour, very few can help users get through moments of temptation or an activity they would like to avoid without giving in.</p>
                 </div>
                 <div>
