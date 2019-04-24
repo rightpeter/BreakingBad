@@ -289,7 +289,7 @@ class Calendar extends React.Component {
                                     <ViewState currentDate={this.state.currentDate} />
                                     <EditingState onCommitChanges={this.commitChanges} />
                                     <WeekView
-                                        startDayHour={0}
+                                        startDayHour={7}
                                         endDayHour={23}
                                         dayScaleCellComponent={e => DayScaleCell(e, this.changeCurrDate)}
                                     />

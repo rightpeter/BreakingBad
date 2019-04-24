@@ -46,7 +46,8 @@ class Home extends Component {
                 <div>
                   <p style={{ fontSize: '1.5em', padding: '0.5em' }}>Research shows that the more people can associate with their future selves, the more willing individuals are to wait for future rewards. When a user is tempted by an activity they would like to avoid, we propose gently reminding them that their future self is the same current self who will have to deal with the consequences of their actions e.g. showing procrastinators their own slightly aged, tired face and a packed future calendar.</p>
                 </div>
-                <Link style={{ textDecoration: 'none' }} to="/config"><button style={{ marginTop: '2em', backgroundColor: '#55acf3', borderColor: '#55acf3' }} className="home-button btn btn-primary" onClick={this.reset}>Configure my Habits</button></Link>
+                <Link style={{ textDecoration: 'none' }} to="/calendar"><button style={{ marginRight: '0.5em', marginTop: '2em', backgroundColor: '#55acf3', borderColor: '#55acf3' }} className="home-button btn btn-primary" onClick={this.reset}>Manage my Schedule</button></Link>
+                <Link style={{ textDecoration: 'none' }} to="/config"><button style={{ marginLeft: '0.5em', marginTop: '2em', backgroundColor: '#55acf3', borderColor: '#55acf3' }} className="home-button btn btn-primary" onClick={this.reset}>Configure my Habits</button></Link>
               </div>
             </div>
           </div>) :
