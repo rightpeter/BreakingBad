@@ -11,12 +11,10 @@ Our survey of personal tracking tools suggests that although they assist users i
 ## Solution 
 - Research shows that the more people can associate with their future selves (who have to deal with the results of their current routines), the more willing individuals are to wait for future rewards. When a user is tempted by an activity they would like to avoid, we propose gently reminding them that their future self is the same current self who will have to deal with the consequences of their actions e.g. showing procrastinators their own slightly aged, tired face and a packed future calendar.
 
-![Procrastination1](https://i.imgur.com/RAYF8kR.png)
-
-![Procrastination2](https://i.imgur.com/Io4twqX.png)
+![Procrastination](https://i.imgur.com/hAq4Y9p.png)
 
 ## Process Flow
-![Process Flow](https://i.imgur.com/FpdalCs.png)
+![Process Flow](https://i.imgur.com/4D3OYEi.png)
 
 ## Scientific Impact
 - Broadening the use case & impact of PI technologies.
