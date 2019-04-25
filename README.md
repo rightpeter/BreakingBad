@@ -11,6 +11,9 @@ Our survey of personal tracking tools suggests that although they assist users i
 ## Solution 
 - Research shows that the more people can associate with their future selves (who have to deal with the results of their current routines), the more willing individuals are to wait for future rewards. When a user is tempted by an activity they would like to avoid, we propose gently reminding them that their future self is the same current self who will have to deal with the consequences of their actions e.g. showing procrastinators their own slightly aged, tired face and a packed future calendar.
 
+## Process Flow
+![Process Flow](https://i.imgur.com/FpdalCs.png)
+
 ## Scientific Impact
 - Broadening the use case & impact of PI technologies.
 
@@ -18,8 +21,15 @@ Our survey of personal tracking tools suggests that although they assist users i
 - Supporting individuals who want to improve their behavior.
 
 ## How to Run
+### Web App
 - For first time user: Install packages with `npm install` in the `/web_app` directory
 - Run with `npm run start`
+
+### Plugin
+- Go to `chrome://extensions/`
+- Turn on the `Developer Mode`
+- Click 'Load Unpacked`
+- Select `/breaking_bad/plugin`
 
 ## Team Members
 - Lihao Lu
