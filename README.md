@@ -1,4 +1,5 @@
 # CS565 Final Project: Breaking Bad (Habits)
+- [Presentation](https://docs.google.com/presentation/d/1499HccIMGWPZ2VVAt6DuEi0QQmR2JdHvXhLpIxEgnnE/edit?usp=sharing)
 ## Challenge
 - Habits are routines, triggered by cues in hopes of a reward. Often, it is difficult to avoid the cue or change the routine.
 Our survey of personal tracking tools suggests that although they assist users in gathering data about their behaviour, very few can help users get through moments of temptation or an activity they would like to avoid without giving in.
@@ -30,7 +31,7 @@ Our survey of personal tracking tools suggests that although they assist users i
 ### Plugin
 - Go to `chrome://extensions/`
 - Turn on the `Developer Mode`
-- Click 'Load Unpacked`
+- Click `Load Unpacked`
 - Select `/breaking_bad/plugin`
 
 ## Team Members
