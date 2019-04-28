@@ -24,6 +24,39 @@ Our survey of personal tracking tools suggests that although they assist users i
 - Supporting individuals who want to improve their behavior.
 
 ## How to Run
+
+### Environment Setup
+#### Web App
+- Create `config.js` in `/breaking_bad/web_app/src` and format is as follows:
+```
+const config = {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: ""
+};
+
+export default config; 
+```
+- The credentials can be found under `Project Overview - Add app - Web` in your Firebase console. 
+```
+{
+    "apiKey": "",
+    "authDomain": "",
+    "databaseURL": "",
+    "projectId": "",
+    "storageBucket": "",
+    "messagingSenderId": ""
+}
+```
+- Use the same credentials as the web app.
+
+#### Plugin
+
+- Create `config.json` in `/breaking_bad/plugin` and format is as follows:
+
 ### Web App
 - For first time user: Install packages with `npm install` in the `/web_app` directory
 - Run with `npm run start`
