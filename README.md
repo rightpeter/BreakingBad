@@ -41,6 +41,10 @@ const config = {
 export default config; 
 ```
 - The credentials can be found under `Project Overview - Add app - Web` in your Firebase console. 
+
+#### Plugin
+
+- Create `config.json` in `/breaking_bad/plugin` and format is as follows:
 ```
 {
     "apiKey": "",
@@ -52,10 +56,6 @@ export default config;
 }
 ```
 - Use the same credentials as the web app.
-
-#### Plugin
-
-- Create `config.json` in `/breaking_bad/plugin` and format is as follows:
 
 ### Web App
 - For first time user: Install packages with `npm install` in the `/web_app` directory
