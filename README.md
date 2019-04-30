@@ -9,7 +9,7 @@ Our survey of personal tracking tools suggests that although they assist users i
 - This activity affects the users negatively.
 - Users are motivated to change this activity  but are looking for assistance from their tools.
 
-## Solution 
+## Solution
 - Research shows that the more people can associate with their future selves (who have to deal with the results of their current routines), the more willing individuals are to wait for future rewards. When a user is tempted by an activity they would like to avoid, we propose gently reminding them that their future self is the same current self who will have to deal with the consequences of their actions e.g. showing procrastinators their own slightly aged, tired face and a packed future calendar.
 
 ![Procrastination](https://i.imgur.com/hAq4Y9p.png)
@@ -38,9 +38,15 @@ const config = {
     messagingSenderId: ""
 };
 
-export default config; 
+export default config;
 ```
-- The credentials can be found under `Project Overview - Add app - Web` in your Firebase console. 
+- The credentials can be found under `Project Overview - Add app - Web` in your Firebase console.
+- The data we saved in firebase looks like this:
+
+        - userId
+            + config
+            + ignore
+            + schedule
 
 #### Plugin
 
@@ -54,8 +60,10 @@ export default config;
     "storageBucket": "",
     "messagingSenderId": ""
 }
+
 ```
 - Use the same credentials as the web app.
+- Update `userId` in `background.js` according your data in firebase
 
 ### Web App
 - For first time user: Install packages with `npm install` in the `/web_app` directory
